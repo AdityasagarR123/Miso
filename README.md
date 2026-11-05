@@ -4,22 +4,22 @@
 
 Viso is a playful language-learning website, with phone apps to follow, guided by a cheeky red panda mascot. Lessons are short, progress feels like a game, and every part of learning is free.
 
-> **Status:** Early development. Level 1 of Spanish is playable with XP, hearts, streaks and saved progress. The other levels and languages are still to come.
+> **Status:** Early development. All 10 languages and their 10 levels are playable, with XP, hearts, streaks and saved progress. The courses are first drafts that still need review by fluent speakers.
 
 ## Languages and levels
 
 Viso will teach ten languages, each taught from English:
 
-- Spanish (Level 1 is ready)
-- French (coming soon)
-- German (coming soon)
-- Japanese (coming soon)
-- Korean (coming soon)
-- Italian (coming soon)
-- Portuguese (coming soon)
-- Mandarin Chinese (coming soon)
-- Hindi (coming soon)
-- Arabic (coming soon)
+- Spanish
+- French
+- German
+- Japanese
+- Korean
+- Italian
+- Portuguese
+- Mandarin Chinese
+- Hindi
+- Arabic
 
 Every language follows the same 10 levels, set across five map regions:
 
@@ -106,12 +106,9 @@ This starts Viso and lets you open it in your browser. The landing page is at `/
 
 ### Courses
 - [x] Add the language picker and 10-level structure
-- [ ] Write the word and grammar plan for all 10 levels
-- [ ] Finish Spanish levels 2 to 10
-- [ ] Write French and German
-- [ ] Write Japanese and Korean, including script lessons
-- [ ] Write Italian and Portuguese
-- [ ] Write Mandarin Chinese, Hindi and Arabic, including script lessons
+- [x] Write a first-draft course of 10 levels for all 10 languages
+- [ ] Deepen each level with more lessons and grammar
+- [ ] Add script lessons for Japanese, Korean, Mandarin Chinese, Hindi and Arabic
 - [ ] Support right-to-left exercises for Arabic
 - [ ] Have fluent speakers review every course
 

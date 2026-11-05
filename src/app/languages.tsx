@@ -12,17 +12,19 @@ import {
 } from 'react-native';
 import Svg from 'react-native-svg';
 
+import { KeyedVideo } from '@/components/KeyedVideo';
 import { InstallButton } from '@/components/landing/InstallButton';
 import { themeForCourse } from '@/components/map/mapThemes';
 import { PageDoodles } from '@/components/map/PageDoodles';
 import { COURSES } from '@/course/courses';
 import { LEVEL_PLAN } from '@/course/levels';
 import type { Course } from '@/course/types';
+import { courseProgress, levelStatus } from '@/progress/progress';
+import { lessonsOf } from '@/course/levels';
 import { useProgress } from '@/progress/ProgressContext';
 import { colors, radius, spacing } from '@/theme';
 
 const LOGO_HEAD = require('../../assets/brand/viso-head.png');
-const LOGO_FULL = require('../../assets/brand/viso-full.png');
 const CONTENT_WIDTH = 1040;
 
 // A CSS transition makes hovering smooth on the web and does nothing on phones.
@@ -47,99 +49,111 @@ function CardArt({ course }: { course: Course }) {
 function LanguageCard({
   course,
   isWide,
-  chosen,
+  featured,
+  levelsDone,
   onPlay,
-  onPreview,
 }: {
   course: Course;
   isWide: boolean;
-  chosen: boolean;
+  featured: boolean;
+  levelsDone: number;
   onPlay: () => void;
-  onPreview: () => void;
 }) {
   const [hovered, setHovered] = useState(false);
-  const ready = course.units.length;
-  const available = ready > 0;
-  const status = available
-    ? `${ready} of ${LEVEL_PLAN.length} levels ready`
-    : 'Coming soon';
+  const theme = themeForCourse(course.id);
+  const status =
+    levelsDone > 0
+      ? `${levelsDone} of ${LEVEL_PLAN.length} levels done`
+      : `${course.units.length} levels ready`;
+
+  const cardStyle = [
+    styles.card,
+    LIFT,
+    isWide
+      ? featured
+        ? styles.cardFeatured
+        : styles.cardRegular
+      : styles.cardFull,
+    { transform: [{ translateY: hovered ? -5 : 0 }] },
+  ];
+  const shared = {
+    accessibilityRole: 'button' as const,
+    accessibilityLabel: `${course.title}, ${status}, play`,
+    onHoverIn: () => setHovered(true),
+    onHoverOut: () => setHovered(false),
+    onPress: onPlay,
+  };
+
+  if (featured) {
+    return (
+      <Pressable {...shared} style={[cardStyle, styles.cardReady]}>
+        <View style={[styles.readyEdge, { backgroundColor: theme.accent }]} />
+        <View style={styles.text}>
+          <Text style={styles.title}>{course.title}</Text>
+          <Text style={styles.status}>{status}</Text>
+          <View style={[styles.play, { backgroundColor: theme.accent }]}>
+            <Text style={styles.playText}>
+              {levelsDone > 0 ? 'Continue' : 'Play'}
+            </Text>
+          </View>
+        </View>
+        <View style={styles.side}>
+          <Text style={styles.greeting}>{course.greeting}</Text>
+          <View pointerEvents="none" style={styles.mascot}>
+            <KeyedVideo label="Viso the red panda studying at a desk" />
+          </View>
+        </View>
+      </Pressable>
+    );
+  }
 
   return (
     <Pressable
-      accessibilityRole="button"
-      accessibilityLabel={
-        available
-          ? `${course.title}, ${status}${chosen ? ', current language' : ''}, play`
-          : `${course.title}, ${status}, preview its map`
-      }
-      onHoverIn={() => setHovered(true)}
-      onHoverOut={() => setHovered(false)}
-      onPress={available ? onPlay : onPreview}
-      style={[
-        styles.card,
-        LIFT,
-        available ? styles.cardReady : styles.cardSoon,
-        isWide
-          ? available
-            ? styles.cardFeatured
-            : styles.cardRegular
-          : styles.cardFull,
-        { transform: [{ translateY: hovered ? -5 : 0 }] },
-      ]}
+      {...shared}
+      style={[cardStyle, styles.cardOther, { backgroundColor: theme.background }]}
     >
-      {available ? (
-        <>
-          <View style={styles.readyEdge} />
-          <View style={styles.text}>
-            <Text style={styles.title}>{course.title}</Text>
-            <Text style={styles.status}>{status}</Text>
-            <View style={styles.play}>
-              <Text style={styles.playText}>{chosen ? 'Continue' : 'Play'}</Text>
-            </View>
-          </View>
-          <View style={styles.side}>
-            <Text style={styles.greeting}>{course.greeting}</Text>
-            <Image
-              accessibilityLabel="Viso the red panda, waving"
-              source={LOGO_FULL}
-              resizeMode="contain"
-              style={styles.mascot}
-            />
-          </View>
-        </>
-      ) : (
-        <View style={styles.soonBody}>
-          <View style={styles.soonTop}>
-            <Text style={styles.titleSoon}>{course.title}</Text>
-            <Text style={styles.greetingSoon}>{course.greeting}</Text>
-          </View>
-          <Text style={styles.statusSoon}>{status}</Text>
-          <CardArt course={course} />
+      <View style={styles.otherBody}>
+        <View style={styles.otherTop}>
+          <Text style={styles.titleOther}>{course.title}</Text>
+          <Text style={[styles.greetingOther, { color: theme.accent }]}>
+            {course.greeting}
+          </Text>
         </View>
-      )}
+        <Text style={styles.statusOther}>{status}</Text>
+        <CardArt course={course} />
+      </View>
     </Pressable>
   );
 }
 
 export default function LanguagesScreen() {
   const router = useRouter();
-  const { course: chosen, selectCourse } = useProgress();
+  const { course: chosen, progress, selectCourse } = useProgress();
   const { width } = useWindowDimensions();
   const isWide = width >= 800;
+  const featuredId = chosen?.id ?? COURSES[0].id;
+
+  const levelsDone = (course: Course) => {
+    const { completedLessons } = courseProgress(progress, course.id);
+    const lessons = lessonsOf(course);
+    return course.units.filter(
+      (unit) => levelStatus(unit.lessons, lessons, completedLessons) === 'done',
+    ).length;
+  };
 
   return (
     <ScrollView
       style={styles.page}
       contentContainerStyle={styles.pageContent}
     >
-      <PageDoodles contentWidth={CONTENT_WIDTH} />
+      <PageDoodles contentWidth={CONTENT_WIDTH} world />
 
       <View style={styles.topLine} />
       <View style={styles.tabs}>
         <Pressable
           accessibilityRole="button"
-          accessibilityLabel={chosen ? 'Back to your lessons' : 'Go to the Viso home page'}
-          onPress={() => router.replace(chosen ? '/learn' : '/')}
+          accessibilityLabel="Go to the Viso home page"
+          onPress={() => router.push('/')}
           style={[styles.tab, styles.tabLeft]}
         >
           <Image source={LOGO_HEAD} resizeMode="contain" style={styles.logo} />
@@ -167,17 +181,12 @@ export default function LanguagesScreen() {
               key={course.id}
               course={course}
               isWide={isWide}
-              chosen={chosen?.id === course.id}
+              featured={course.id === featuredId}
+              levelsDone={levelsDone(course)}
               onPlay={() => {
                 selectCourse(course.id);
                 router.replace('/learn');
               }}
-              onPreview={() =>
-                router.push({
-                  pathname: '/world/[courseId]',
-                  params: { courseId: course.id },
-                })
-              }
             />
           ))}
         </View>
@@ -213,8 +222,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     gap: spacing.sm,
     minHeight: 58,
-    paddingHorizontal: spacing.md,
     paddingBottom: spacing.sm,
+    paddingHorizontal: spacing.md,
   },
   tabLeft: {
     borderBottomRightRadius: radius.lg,
@@ -273,7 +282,7 @@ const styles = StyleSheet.create({
   },
   cardFeatured: {
     flexBasis: '47%',
-    minHeight: 176,
+    minHeight: 190,
   },
   cardRegular: {
     flexBasis: '22%',
@@ -284,17 +293,16 @@ const styles = StyleSheet.create({
   },
   cardReady: {
     backgroundColor: colors.white,
-    paddingLeft: spacing.lg,
-    // A soft shadow lifts the playable card above the others.
     boxShadow: '0 8px 22px rgba(59, 35, 24, 0.22)',
+    paddingLeft: spacing.lg,
   } as ViewStyle,
-  cardSoon: {
-    backgroundColor: '#F3EADB',
-    borderColor: '#CDBFA9',
+  cardOther: {
+    borderBottomColor: colors.brown,
+    borderBottomWidth: 4,
+    borderColor: colors.brown,
     borderWidth: 2,
   },
   readyEdge: {
-    backgroundColor: colors.rustDark,
     bottom: 0,
     left: 0,
     position: 'absolute',
@@ -311,38 +319,16 @@ const styles = StyleSheet.create({
     fontWeight: '800',
     lineHeight: 34,
   },
-  soonBody: {
-    flex: 1,
-    gap: spacing.xs,
-  },
-  soonTop: {
-    alignItems: 'flex-start',
-    flexDirection: 'row',
-    gap: spacing.sm,
-    justifyContent: 'space-between',
-  },
-  titleSoon: {
-    color: colors.brown,
-    flexShrink: 0,
-    fontSize: 21,
-    fontWeight: '800',
-    lineHeight: 26,
-  },
   status: {
     color: colors.brown,
     fontSize: 16,
   },
-  statusSoon: {
-    color: colors.brown,
-    fontSize: 14,
-  },
   play: {
     alignSelf: 'flex-start',
-    backgroundColor: colors.rustDark,
     borderRadius: radius.md,
+    justifyContent: 'center',
     marginTop: spacing.sm,
     minHeight: 44,
-    justifyContent: 'center',
     paddingHorizontal: spacing.lg,
   },
   playText: {
@@ -352,7 +338,7 @@ const styles = StyleSheet.create({
   },
   side: {
     alignItems: 'flex-end',
-    flexShrink: 0,
+    flex: 1,
     gap: spacing.xs,
     marginLeft: spacing.sm,
   },
@@ -361,17 +347,39 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: '800',
   },
-  greetingSoon: {
+  mascot: {
+    bottom: -14,
+    height: 150,
+    position: 'absolute',
+    right: -10,
+    width: 240,
+  },
+  otherBody: {
+    flex: 1,
+    gap: spacing.xs,
+  },
+  otherTop: {
+    alignItems: 'flex-start',
+    flexDirection: 'row',
+    gap: spacing.sm,
+    justifyContent: 'space-between',
+  },
+  titleOther: {
     color: colors.brown,
+    flexShrink: 0,
+    fontSize: 21,
+    fontWeight: '800',
+    lineHeight: 26,
+  },
+  statusOther: {
+    color: colors.brown,
+    fontSize: 14,
+  },
+  greetingOther: {
     flexShrink: 0,
     fontSize: 16,
     fontWeight: '800',
     lineHeight: 26,
-  },
-  mascot: {
-    height: 120,
-    marginBottom: -28,
-    width: 128,
   },
   art: {
     bottom: -6,

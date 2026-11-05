@@ -29,7 +29,6 @@ export default function RootLayout() {
         <Stack.Screen name="lesson/[lessonId]" options={{ title: 'Lesson' }} />
         <Stack.Screen name="practice" options={{ title: 'Practice' }} />
         <Stack.Screen name="languages" options={{ headerShown: false, title: 'Languages' }} />
-        <Stack.Screen name="world/[courseId]" options={{ title: 'World' }} />
       </Stack>
       <StatusBar style="dark" />
       <ConfettiHost />

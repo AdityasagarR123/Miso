@@ -10,13 +10,12 @@ import {
 
 import { LANDING_THEME_COUNT, MAP_THEMES } from '@/components/map/mapThemes';
 import { RoadMap, type RoadStop } from '@/components/map/RoadMap';
-import { COURSES } from '@/course/courses';
 import { LEVEL_PLAN } from '@/course/levels';
 import { colors, radius, spacing } from '@/theme';
 
 type TrailMapProps = {
   startLabel: string;
-  onStart: () => void;
+  onStart: (courseId: string) => void;
 };
 
 /** The landing page's map: a preview of all five language worlds. */
@@ -25,20 +24,18 @@ export function TrailMap({ startLabel, onStart }: TrailMapProps) {
   const { width, height } = useWindowDimensions();
   const [themeIndex, setThemeIndex] = useState(0);
   const theme = MAP_THEMES[themeIndex];
-  const course = COURSES.find((item) => item.id === theme.courseId);
-  const readyLevels = course?.units.length ?? 0;
   const isWide = width >= 800;
 
   const stops: RoadStop[] = LEVEL_PLAN.map((level) => {
-    const available = level.number <= readyLevels;
+    const available = level.number === 1;
     return {
       key: `${theme.courseId}-${level.id}`,
       number: level.number,
       caption: level.title,
       tooltipTitle: `Level ${level.number}: ${level.title}`,
-      tooltipStatus: available ? startLabel : 'Coming soon',
+      tooltipStatus: available ? startLabel : 'Unlocks as you play',
       status: available ? 'open' : 'locked',
-      onPress: available ? onStart : undefined,
+      onPress: available ? () => onStart(theme.courseId) : undefined,
     };
   });
 

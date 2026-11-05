@@ -27,12 +27,12 @@ import {
   XpIcon,
 } from '@/components/GameIcons';
 import { COURSES } from '@/course/courses';
-import { LEVEL_PLAN } from '@/course/levels';
 import { useProgress } from '@/progress/ProgressContext';
 import { colors, radius, spacing } from '@/theme';
 
 import { HeroArt } from './HeroArt';
 import { InstallButton } from './InstallButton';
+import { LanguagesSection } from './LanguagesSection';
 import { TrailMap } from './TrailMap';
 import { TryIt } from './TryIt';
 
@@ -207,7 +207,7 @@ function Section({
 
 export function Landing() {
   const router = useRouter();
-  const { course } = useProgress();
+  const { course, selectCourse } = useProgress();
   const { width, height } = useWindowDimensions();
   const scrollRef = useRef<ComponentRef<typeof ScrollView>>(null);
   const sectionY = useRef<Record<string, number>>({});
@@ -222,7 +222,8 @@ export function Landing() {
     { fontSize: headlineSize, lineHeight: headlineSize * 1.15 },
   ];
   const startLabel = course ? 'Continue learning' : 'Start learning for free';
-  const start = () => router.push('/learn');
+  // Starting always offers the choice of language.
+  const start = () => router.push('/languages');
   const goTo = (section: string) =>
     scrollRef.current?.scrollTo({
       y: Math.max(
@@ -298,7 +299,13 @@ export function Landing() {
             onLayout={(event) => remember('map')(event.nativeEvent.layout.y)}
             style={styles.mapWrap}
           >
-            <TrailMap startLabel={startLabel} onStart={start} />
+            <TrailMap
+              startLabel={startLabel}
+              onStart={(courseId) => {
+                selectCourse(courseId);
+                router.push('/learn');
+              }}
+            />
           </View>
 
           <Section
@@ -320,31 +327,7 @@ export function Landing() {
             </View>
           </Section>
 
-          <Section
-            title="Ten languages. One path."
-            subtitle={`Every language follows the same ${LEVEL_PLAN.length} levels.`}
-            onLayoutY={remember('languages')}
-          >
-            <View style={styles.grid}>
-              {COURSES.slice(0, 5).map((item) => (
-                <View key={item.id} style={styles.languageCard}>
-                  <Text style={styles.cardGreeting}>{item.greeting}</Text>
-                  <Text style={styles.cardTitle}>{item.title}</Text>
-                  <Text style={styles.cardText}>
-                    {item.units.length > 0
-                      ? `${item.units.length} of ${LEVEL_PLAN.length} levels ready`
-                      : 'Coming soon'}
-                  </Text>
-                </View>
-              ))}
-            </View>
-            <View style={styles.allLanguages}>
-              <Pill
-                label="See all 10 languages"
-                onPress={() => router.push('/languages')}
-              />
-            </View>
-          </Section>
+          <LanguagesSection onLayoutY={remember('languages')} />
 
           <Section title="Free means free">
             <View style={styles.promises}>
@@ -644,10 +627,6 @@ const styles = StyleSheet.create({
     color: colors.brown,
     fontSize: 15,
     lineHeight: 22,
-  },
-  allLanguages: {
-    alignItems: 'center',
-    marginTop: spacing.sm,
   },
   promises: {
     alignSelf: 'center',
