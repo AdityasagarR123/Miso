@@ -43,7 +43,7 @@ function PracticeSession() {
         <Text style={styles.body}>
           You earned {earned} {earned === 1 ? 'heart' : 'hearts'}.
         </Text>
-        <Button label="Back to lessons" onPress={() => router.replace('/')} />
+        <Button label="Back to lessons" onPress={() => router.replace('/learn')} />
       </Screen>
     );
   }

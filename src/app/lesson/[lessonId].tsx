@@ -25,7 +25,7 @@ export default function LessonScreen() {
             ? 'Finish the lesson before this one to unlock it.'
             : "We couldn't find that lesson."}
         </Text>
-        <Button label="Back to lessons" onPress={() => router.replace('/')} />
+        <Button label="Back to lessons" onPress={() => router.replace('/learn')} />
       </Screen>
     );
   }

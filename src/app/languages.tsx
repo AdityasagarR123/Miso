@@ -36,7 +36,7 @@ export default function LanguagesScreen() {
             disabled={!available}
             onPress={() => {
               selectCourse(course.id);
-              router.replace('/');
+              router.replace('/learn');
             }}
             style={({ pressed }) => [
               styles.card,

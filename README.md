@@ -69,7 +69,7 @@ npm install
 npm run web
 ```
 
-This starts Viso and lets you open it in your browser. The web version comes first, so that's the main way to run it for now.
+This starts Viso and lets you open it in your browser. The landing page is at `/` and the lessons are at `/learn`. The web version comes first, so that's the main way to run it for now.
 
 ## Roadmap
 
@@ -113,6 +113,8 @@ This starts Viso and lets you open it in your browser. The web version comes fir
 - [ ] Add a learner profile with stats
 
 ### Phase 6: Web launch
+- [x] Add the landing page
+- [x] Make the website installable on desktop and phones
 - [ ] Test with a small group of learners and fix what they find
 - [ ] Add audio pronunciation for lessons
 - [ ] Publish the Viso website

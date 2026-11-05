@@ -9,6 +9,13 @@ export const colors = {
   border: '#E5D5BD',
   tealLight: '#D2F1EE',
   rustLight: '#FBE0D3',
+  rustBright: '#F07B3F',
+  tealBright: '#3FD0C4',
+  ink: '#1C1411',
+  inkRaised: '#2A1F1A',
+  inkBorder: '#46362E',
+  sand: '#FBF0E0',
+  sandMuted: '#CDBBA6',
 };
 
 export const spacing = {
@@ -20,5 +27,6 @@ export const spacing = {
 
 export const radius = {
   md: 16,
+  lg: 24,
   pill: 999,
 };

@@ -35,7 +35,7 @@ export function LessonPlayer({ lesson }: { lesson: Lesson }) {
           You got {correctCount} of {total} right in {lesson.title} and earned{' '}
           {correctCount * XP_PER_CORRECT + bonusXp} XP.
         </Text>
-        <Button label="Back to lessons" onPress={() => router.replace('/')} />
+        <Button label="Back to lessons" onPress={() => router.replace('/learn')} />
         <Button
           label="Practice again"
           variant="secondary"
@@ -63,7 +63,7 @@ export function LessonPlayer({ lesson }: { lesson: Lesson }) {
         <Button
           label="Back to lessons"
           variant="secondary"
-          onPress={() => router.replace('/')}
+          onPress={() => router.replace('/learn')}
         />
       </Screen>
     );
