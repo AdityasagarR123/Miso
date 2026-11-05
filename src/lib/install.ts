@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react';
 import { Platform } from 'react-native';
 
+import { publicUrl } from './basePath';
+
 type InstallPromptEvent = Event & { prompt: () => Promise<void> };
 
 let deferredPrompt: InstallPromptEvent | null = null;
@@ -22,8 +24,8 @@ function addHeadTag(tag: 'link' | 'meta', attributes: Record<string, string>) {
 // Runs on load so that the browser's install event is not missed, because it
 // can fire before any screen has been shown.
 if (Platform.OS === 'web' && typeof window !== 'undefined') {
-  addHeadTag('link', { rel: 'manifest', href: '/manifest.webmanifest' });
-  addHeadTag('link', { rel: 'apple-touch-icon', href: '/icon-192.png' });
+  addHeadTag('link', { rel: 'manifest', href: publicUrl('/manifest.webmanifest') });
+  addHeadTag('link', { rel: 'apple-touch-icon', href: publicUrl('/icon-192.png') });
   addHeadTag('meta', { name: 'theme-color', content: '#1C1411' });
 
   window.addEventListener('beforeinstallprompt', (event) => {

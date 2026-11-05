@@ -65,6 +65,10 @@ These choices may change as the project grows.
 | Mascot animation | Rive | Small files and animations that react live to the learner |
 | Backend | Supabase | Accounts and progress sync across devices |
 
+## Try it
+
+Viso is live at **https://adityasagarr123.github.io/Viso/**. It publishes automatically whenever `main` changes.
+
 ## Getting started
 
 You'll need [Node.js](https://nodejs.org). Then run:
@@ -122,7 +126,7 @@ This starts Viso and lets you open it in your browser. The landing page is at `/
 - [x] Make the website installable on desktop and phones
 - [ ] Test with a small group of learners and fix what they find
 - [ ] Add audio pronunciation for lessons
-- [ ] Publish the Viso website
+- [x] Publish the Viso website
 
 ### Phase 7: Phone apps
 - [ ] Test and adapt the app on Android and iOS

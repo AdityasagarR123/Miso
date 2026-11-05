@@ -16,6 +16,7 @@ import {
   type TextStyle,
   useWindowDimensions,
   View,
+  type ViewStyle,
 } from 'react-native';
 import Svg, { Path } from 'react-native-svg';
 
@@ -48,6 +49,22 @@ const WEB_FADE = {
   transitionProperty: 'opacity',
 } as TextStyle;
 const NAV_OFFSET = 96;
+
+// These web-only styles fade the nav and give it its glossy glass look.
+const NAV_FADE = {
+  transitionDuration: '260ms',
+  transitionProperty: 'background-color, border-color, box-shadow',
+} as ViewStyle;
+const NAV_GLASS = {
+  ...NAV_FADE,
+  backdropFilter: 'blur(16px) saturate(170%)',
+  backgroundColor: 'rgba(28, 20, 17, 0.62)',
+  backgroundImage:
+    'linear-gradient(180deg, rgba(255, 255, 255, 0.24), rgba(255, 255, 255, 0.03) 55%)',
+  borderColor: 'rgba(255, 255, 255, 0.3)',
+  boxShadow:
+    '0 10px 30px rgba(28, 20, 17, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.4)',
+} as ViewStyle;
 
 const GAME_FEATURES = [
   {
@@ -445,8 +462,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     borderRadius: radius.pill,
     borderWidth: 1,
-    transitionDuration: '260ms',
-    transitionProperty: 'background-color, border-color, box-shadow',
     flexDirection: 'row',
     justifyContent: 'space-between',
     maxWidth: 1040,
@@ -459,17 +474,10 @@ const styles = StyleSheet.create({
   navClear: {
     backgroundColor: 'transparent',
     borderColor: 'transparent',
+    ...NAV_FADE,
   },
   // Past the hero, it becomes a glossy sheet of glass.
-  navGlass: {
-    backdropFilter: 'blur(16px) saturate(170%)',
-    backgroundColor: 'rgba(28, 20, 17, 0.62)',
-    backgroundImage:
-      'linear-gradient(180deg, rgba(255, 255, 255, 0.24), rgba(255, 255, 255, 0.03) 55%)',
-    borderColor: 'rgba(255, 255, 255, 0.3)',
-    boxShadow:
-      '0 10px 30px rgba(28, 20, 17, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.4)',
-  },
+  navGlass: NAV_GLASS,
   brand: {
     alignItems: 'center',
     flexDirection: 'row',

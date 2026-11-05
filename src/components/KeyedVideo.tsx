@@ -1,7 +1,9 @@
 import { createElement, useEffect, useRef } from 'react';
 import { AccessibilityInfo, Image, Platform, StyleSheet, View } from 'react-native';
 
-const VIDEO_SRC = '/video/viso-moves.mp4';
+import { publicUrl } from '@/lib/basePath';
+
+const VIDEO_SRC = publicUrl('/video/viso-moves.mp4');
 const LOGO_FULL = require('../../assets/brand/viso-full.png');
 
 // Drawn at a modest size, because removing the green touches every pixel.
