@@ -10,10 +10,12 @@ import {
   completeLesson,
   completePractice,
   courseProgress,
+  currentStopIndex,
   currentStreak,
   dayKey,
   initialProgress,
   isLessonUnlocked,
+  levelStatus,
   parseProgress,
 } from './progress.ts';
 
@@ -136,6 +138,28 @@ test('lessons unlock one at a time', () => {
   assert.equal(isLessonUnlocked(lessons, ['a'], 'b'), true);
   assert.equal(isLessonUnlocked(lessons, ['a'], 'c'), false);
   assert.equal(isLessonUnlocked(lessons, ['a'], 'missing'), false);
+});
+
+test('level status follows its lessons', () => {
+  const first = [lessons[0], lessons[1]];
+  const second = [lessons[2]];
+  assert.equal(levelStatus([], lessons, []), 'soon');
+  assert.equal(levelStatus([], lessons, ['a', 'b', 'c']), 'soon');
+  assert.equal(levelStatus(first, lessons, []), 'open');
+  assert.equal(levelStatus(first, lessons, ['a']), 'open');
+  assert.equal(levelStatus(first, lessons, ['a', 'b']), 'done');
+  assert.equal(levelStatus(second, lessons, []), 'locked');
+  assert.equal(levelStatus(second, lessons, ['a']), 'locked');
+  assert.equal(levelStatus(second, lessons, ['a', 'b']), 'open');
+});
+
+test('Viso stands at the first open stop, or the last finished one', () => {
+  assert.equal(currentStopIndex(['open', 'soon', 'soon']), 0);
+  assert.equal(currentStopIndex(['done', 'done', 'open', 'locked']), 2);
+  assert.equal(currentStopIndex(['done', 'done', 'soon']), 1);
+  assert.equal(currentStopIndex(['done', 'done']), 1);
+  assert.equal(currentStopIndex(['soon', 'soon']), 0);
+  assert.equal(currentStopIndex([]), 0);
 });
 
 test('practice puts mistakes first and skips locked lessons', () => {

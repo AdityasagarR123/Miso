@@ -43,6 +43,10 @@ function region(name: string, top: string, side: string, token: string, rim: str
   return { name, top, side, token, rim };
 }
 
+export function themeForCourse(courseId: string): MapTheme {
+  return MAP_THEMES.find((theme) => theme.courseId === courseId) ?? MAP_THEMES[0];
+}
+
 export const MAP_THEMES: MapTheme[] = [
   {
     courseId: 'es-from-en',

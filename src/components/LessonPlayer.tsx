@@ -14,8 +14,19 @@ import { XP_FOR_FIRST_COMPLETION, XP_PER_CORRECT } from '@/progress/progress';
 import { useProgress } from '@/progress/ProgressContext';
 import { colors } from '@/theme';
 
-export function LessonPlayer({ lesson }: { lesson: Lesson }) {
+export function LessonPlayer({
+  lesson,
+  levelId,
+}: {
+  lesson: Lesson;
+  levelId: string;
+}) {
   const router = useRouter();
+  const backToLevel = () =>
+    router.dismissTo({
+      pathname: '/level/[levelId]',
+      params: { levelId },
+    });
   const { progress, current, recordLessonAnswer, finishLesson } = useProgress();
   const [attempt, setAttempt] = useState(0);
   const [index, setIndex] = useState(0);
@@ -35,7 +46,7 @@ export function LessonPlayer({ lesson }: { lesson: Lesson }) {
           You got {correctCount} of {total} right in {lesson.title} and earned{' '}
           {correctCount * XP_PER_CORRECT + bonusXp} XP.
         </Text>
-        <Button label="Back to lessons" onPress={() => router.replace('/learn')} />
+        <Button label="Back to lessons" onPress={backToLevel} />
         <Button
           label="Practice again"
           variant="secondary"
@@ -63,7 +74,7 @@ export function LessonPlayer({ lesson }: { lesson: Lesson }) {
         <Button
           label="Back to lessons"
           variant="secondary"
-          onPress={() => router.replace('/learn')}
+          onPress={backToLevel}
         />
       </Screen>
     );

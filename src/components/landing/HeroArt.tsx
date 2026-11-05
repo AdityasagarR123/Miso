@@ -8,7 +8,7 @@ import {
   Mountain,
   Sparkle,
   Squiggle,
-} from './Doodles';
+} from '@/components/map/Doodles';
 
 const LINE = '#FBF0E0';
 const FONT = 'system-ui, -apple-system, "Segoe UI", sans-serif';

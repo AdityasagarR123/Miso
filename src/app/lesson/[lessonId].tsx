@@ -10,7 +10,7 @@ import { colors } from '@/theme';
 
 export default function LessonScreen() {
   const router = useRouter();
-  const { lessons, current } = useProgress();
+  const { course, lessons, current } = useProgress();
   const { lessonId } = useLocalSearchParams<{ lessonId: string }>();
   const lesson = lessons.find((candidate) => candidate.id === lessonId);
 
@@ -30,10 +30,15 @@ export default function LessonScreen() {
     );
   }
 
+  const levelId =
+    course?.units.find((unit) =>
+      unit.lessons.some((candidate) => candidate.id === lesson.id),
+    )?.id ?? '';
+
   return (
     <>
       <Stack.Screen options={{ title: lesson.title }} />
-      <LessonPlayer key={lesson.id} lesson={lesson} />
+      <LessonPlayer key={lesson.id} lesson={lesson} levelId={levelId} />
     </>
   );
 }

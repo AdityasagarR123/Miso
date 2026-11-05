@@ -25,6 +25,7 @@ export default function RootLayout() {
       >
         <Stack.Screen name="index" options={{ headerShown: false, title: 'Viso' }} />
         <Stack.Screen name="learn" options={{ headerShown: false, title: 'Viso' }} />
+        <Stack.Screen name="level/[levelId]" options={{ title: 'Level' }} />
         <Stack.Screen name="lesson/[lessonId]" options={{ title: 'Lesson' }} />
         <Stack.Screen name="practice" options={{ title: 'Practice' }} />
         <Stack.Screen name="languages" options={{ title: 'Languages' }} />

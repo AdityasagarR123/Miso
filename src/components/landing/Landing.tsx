@@ -298,7 +298,7 @@ export function Landing() {
             onLayout={(event) => remember('map')(event.nativeEvent.layout.y)}
             style={styles.mapWrap}
           >
-            <TrailMap logo={LOGO_FULL} startLabel={startLabel} onStart={start} />
+            <TrailMap startLabel={startLabel} onStart={start} />
           </View>
 
           <Section

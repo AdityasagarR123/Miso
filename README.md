@@ -97,7 +97,7 @@ This starts Viso and lets you open it in your browser. The landing page is at `/
 ### Phase 4: Bringing Viso to life
 - [ ] Animate Viso in Rive: idle, correct, wrong, streak warning and celebration
 - [ ] Trigger reactions from what happens in a lesson
-- [ ] Move Viso along the lesson path
+- [x] Move Viso along the lesson path
 
 ### Courses
 - [x] Add the language picker and 10-level structure

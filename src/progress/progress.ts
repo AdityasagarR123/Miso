@@ -190,6 +190,31 @@ export function isLessonUnlocked(
   return completedLessons.includes(lessons[index - 1].id);
 }
 
+export type LevelStatus = 'done' | 'open' | 'locked' | 'soon';
+
+/** A level with no lessons yet is coming soon, whatever else has been done. */
+export function levelStatus(
+  levelLessons: Lesson[],
+  allLessons: Lesson[],
+  completedLessons: string[],
+): LevelStatus {
+  if (levelLessons.length === 0) return 'soon';
+  if (levelLessons.every((lesson) => completedLessons.includes(lesson.id))) {
+    return 'done';
+  }
+  return isLessonUnlocked(allLessons, completedLessons, levelLessons[0].id)
+    ? 'open'
+    : 'locked';
+}
+
+/** Where Viso stands: the first open stop, or the last finished one. */
+export function currentStopIndex(statuses: string[]): number {
+  const open = statuses.indexOf('open');
+  if (open >= 0) return open;
+  const lastDone = statuses.lastIndexOf('done');
+  return lastDone >= 0 ? lastDone : 0;
+}
+
 /** Past mistakes come first, then other exercises from unlocked lessons. */
 export function buildPracticeSet(
   lessons: Lesson[],
