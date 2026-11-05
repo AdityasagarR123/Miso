@@ -1,4 +1,4 @@
-import { useRouter } from 'expo-router';
+import { Redirect, useRouter } from 'expo-router';
 import { useState } from 'react';
 import { StyleSheet, Text } from 'react-native';
 
@@ -10,7 +10,6 @@ import { ProgressBar } from '@/components/ProgressBar';
 import { Screen } from '@/components/Screen';
 import { StatsBar } from '@/components/StatsBar';
 import { shuffle } from '@/course/shuffle';
-import { allLessons } from '@/course/spanish';
 import { buildPracticeSet } from '@/progress/progress';
 import { useProgress } from '@/progress/ProgressContext';
 import { colors } from '@/theme';
@@ -18,10 +17,17 @@ import { colors } from '@/theme';
 const PRACTICE_LENGTH = 5;
 
 export default function PracticeScreen() {
+  const { course } = useProgress();
+  if (!course) return <Redirect href="/languages" />;
+  return <PracticeSession />;
+}
+
+function PracticeSession() {
   const router = useRouter();
-  const { progress, recordPracticeAnswer, finishPractice } = useProgress();
+  const { progress, lessons, current, recordPracticeAnswer, finishPractice } =
+    useProgress();
   const [exercises] = useState(() =>
-    buildPracticeSet(allLessons, progress, PRACTICE_LENGTH, shuffle),
+    buildPracticeSet(lessons, current, PRACTICE_LENGTH, shuffle),
   );
   const [startHearts] = useState(progress.hearts);
   const [index, setIndex] = useState(0);

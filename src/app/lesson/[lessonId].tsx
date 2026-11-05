@@ -4,18 +4,17 @@ import { StyleSheet, Text } from 'react-native';
 import { Button } from '@/components/Button';
 import { LessonPlayer } from '@/components/LessonPlayer';
 import { Screen } from '@/components/Screen';
-import { allLessons } from '@/course/spanish';
 import { isLessonUnlocked } from '@/progress/progress';
 import { useProgress } from '@/progress/ProgressContext';
 import { colors } from '@/theme';
 
 export default function LessonScreen() {
   const router = useRouter();
-  const { progress } = useProgress();
+  const { lessons, current } = useProgress();
   const { lessonId } = useLocalSearchParams<{ lessonId: string }>();
-  const lesson = allLessons.find((candidate) => candidate.id === lessonId);
+  const lesson = lessons.find((candidate) => candidate.id === lessonId);
 
-  if (!lesson || !isLessonUnlocked(allLessons, progress, lesson.id)) {
+  if (!lesson || !isLessonUnlocked(lessons, current.completedLessons, lesson.id)) {
     return (
       <Screen>
         <Stack.Screen

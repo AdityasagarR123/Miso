@@ -16,7 +16,7 @@ import { colors } from '@/theme';
 
 export function LessonPlayer({ lesson }: { lesson: Lesson }) {
   const router = useRouter();
-  const { progress, recordLessonAnswer, finishLesson } = useProgress();
+  const { progress, current, recordLessonAnswer, finishLesson } = useProgress();
   const [attempt, setAttempt] = useState(0);
   const [index, setIndex] = useState(0);
   const [correctCount, setCorrectCount] = useState(0);
@@ -80,7 +80,7 @@ export function LessonPlayer({ lesson }: { lesson: Lesson }) {
 
   const goToNext = () => {
     if (isLast) {
-      if (!progress.completedLessons.includes(lesson.id)) {
+      if (!current.completedLessons.includes(lesson.id)) {
         setBonusXp(XP_FOR_FIRST_COMPLETION);
       }
       finishLesson(lesson.id);

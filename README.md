@@ -2,9 +2,34 @@
 
 **Learn a language in a few minutes a day, completely free.**
 
-Viso is a playful language-learning website, with phone apps to follow, guided by a cheeky red panda mascot. Lessons are short, progress feels like a game, and every part of learning is free. The first course will be **Spanish**.
+Viso is a playful language-learning website, with phone apps to follow, guided by a cheeky red panda mascot. Lessons are short, progress feels like a game, and every part of learning is free.
 
-> **Status:** Early development. The first Spanish unit is playable with XP, hearts, streaks and saved progress. Accounts, the animated mascot and more are still to come.
+> **Status:** Early development. Level 1 of Spanish is playable with XP, hearts, streaks and saved progress. The other levels and languages are still to come.
+
+## Languages and levels
+
+Viso will teach five languages, each taught from English:
+
+- Spanish (Level 1 is ready)
+- French (coming soon)
+- German (coming soon)
+- Japanese (coming soon)
+- Korean (coming soon)
+
+Every language follows the same 10 levels, set across five map regions:
+
+| Level | Topic | Region |
+|---|---|---|
+| 1 | Basics | Bamboo Grove |
+| 2 | People and family | Bamboo Grove |
+| 3 | Food and drink | Market Town |
+| 4 | Shopping and money | Market Town |
+| 5 | Travel and directions | Harbor Bay |
+| 6 | Hotels and getting around | Harbor Bay |
+| 7 | Daily routine | Cloud Village |
+| 8 | Work and hobbies | Cloud Village |
+| 9 | Past and future | Starlight Peak |
+| 10 | Real conversations | Starlight Peak |
 
 ## Completely free
 
@@ -74,6 +99,14 @@ This starts Viso and lets you open it in your browser. The web version comes fir
 - [ ] Trigger reactions from what happens in a lesson
 - [ ] Move Viso along the lesson path
 
+### Courses
+- [x] Add the language picker and 10-level structure
+- [ ] Write the word and grammar plan for all 10 levels
+- [ ] Finish Spanish levels 2 to 10
+- [ ] Write French and German
+- [ ] Write Japanese and Korean, including script lessons
+- [ ] Have fluent speakers review every course
+
 ### Phase 5: Accounts and sync
 - [ ] Add sign-up and login
 - [ ] Sync progress across devices
@@ -90,7 +123,6 @@ This starts Viso and lets you open it in your browser. The web version comes fir
 - [ ] Release on Google Play and the App Store
 
 ### Later
-- [ ] More language courses
 - [ ] Spaced repetition tuned to each learner
 - [ ] Leaderboards and friends
 - [ ] Offline lessons

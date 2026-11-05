@@ -1,8 +1,10 @@
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
 
-import { allLessons, spanishCourse } from './spanish.ts';
+import { LEVEL_PLAN, lessonsOf } from './levels.ts';
+import { spanishCourse } from './spanish.ts';
 
+const allLessons = lessonsOf(spanishCourse);
 const allExercises = allLessons.flatMap((lesson) => lesson.exercises);
 
 function assertUnique(values, label) {
@@ -12,6 +14,25 @@ function assertUnique(values, label) {
     seen.add(value);
   }
 }
+
+test('there are 10 levels, with two in each of the five regions', () => {
+  assert.equal(LEVEL_PLAN.length, 10);
+  assertUnique(LEVEL_PLAN.map((level) => level.id), 'level id');
+  assert.deepEqual(LEVEL_PLAN.map((level) => level.number), [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]);
+  const regions = new Map();
+  for (const { region } of LEVEL_PLAN) regions.set(region, (regions.get(region) ?? 0) + 1);
+  assert.equal(regions.size, 5);
+  for (const count of regions.values()) assert.equal(count, 2);
+});
+
+test('every unit belongs to a planned level, so no lessons get lost', () => {
+  const levelIds = LEVEL_PLAN.map((level) => level.id);
+  for (const unit of spanishCourse.units) {
+    assert.ok(levelIds.includes(unit.id), `${unit.id} is not a planned level`);
+  }
+  const inUnits = spanishCourse.units.flatMap((unit) => unit.lessons);
+  assert.equal(allLessons.length, inUnits.length);
+});
 
 test('lesson, unit and exercise ids are unique', () => {
   assertUnique(spanishCourse.units.map((unit) => unit.id), 'unit id');

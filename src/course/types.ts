@@ -43,6 +43,8 @@ export type Unit = {
 export type Course = {
   id: string;
   title: string;
+  /** A hello in this language, shown in the language picker. */
+  greeting: string;
   /** BCP 47 language tag of the language being learned. */
   learningLanguage: string;
   /** BCP 47 language tag of the language the course is taught in. */

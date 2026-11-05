@@ -24,6 +24,7 @@ export default function RootLayout() {
         <Stack.Screen name="index" options={{ headerShown: false, title: 'Viso' }} />
         <Stack.Screen name="lesson/[lessonId]" options={{ title: 'Lesson' }} />
         <Stack.Screen name="practice" options={{ title: 'Practice' }} />
+        <Stack.Screen name="languages" options={{ title: 'Languages' }} />
       </Stack>
       <StatusBar style="dark" />
     </ProgressProvider>

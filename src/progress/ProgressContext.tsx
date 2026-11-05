@@ -8,14 +8,20 @@ import {
   type ReactNode,
 } from 'react';
 
+import { courseById } from '../course/courses';
+import { lessonsOf } from '../course/levels';
+import type { Course, Lesson } from '../course/types';
 import {
   answerInLesson,
   answerInPractice,
+  chooseCourse,
   completeLesson,
   completePractice,
+  courseProgress,
   dayKey,
   initialProgress,
   parseProgress,
+  type CourseProgress,
   type Progress,
 } from './progress';
 
@@ -23,6 +29,11 @@ const STORAGE_KEY = 'viso.progress';
 
 type ProgressContextValue = {
   progress: Progress;
+  /** The language being learned, or null if none is chosen yet. */
+  course: Course | null;
+  lessons: Lesson[];
+  current: CourseProgress;
+  selectCourse: (courseId: string) => void;
   recordLessonAnswer: (exerciseId: string, correct: boolean) => void;
   recordPracticeAnswer: (exerciseId: string, correct: boolean) => void;
   finishLesson: (lessonId: string) => void;
@@ -48,20 +59,32 @@ export function ProgressProvider({ children }: { children: ReactNode }) {
     AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(progress)).catch(() => {});
   }, [loaded, progress]);
 
-  const value = useMemo<ProgressContextValue>(
-    () => ({
+  const value = useMemo<ProgressContextValue>(() => {
+    const course = courseById(progress.currentCourseId);
+    const courseId = course?.id ?? '';
+
+    return {
       progress,
+      course,
+      lessons: course ? lessonsOf(course) : [],
+      current: courseProgress(progress, courseId),
+      selectCourse: (id) => setProgress((prev) => chooseCourse(prev, id)),
       recordLessonAnswer: (exerciseId, correct) =>
-        setProgress((prev) => answerInLesson(prev, exerciseId, correct)),
+        setProgress((prev) =>
+          answerInLesson(prev, courseId, exerciseId, correct),
+        ),
       recordPracticeAnswer: (exerciseId, correct) =>
-        setProgress((prev) => answerInPractice(prev, exerciseId, correct)),
+        setProgress((prev) =>
+          answerInPractice(prev, courseId, exerciseId, correct),
+        ),
       finishLesson: (lessonId) =>
-        setProgress((prev) => completeLesson(prev, lessonId, dayKey(new Date()))),
+        setProgress((prev) =>
+          completeLesson(prev, courseId, lessonId, dayKey(new Date())),
+        ),
       finishPractice: () =>
         setProgress((prev) => completePractice(prev, dayKey(new Date()))),
-    }),
-    [progress],
-  );
+    };
+  }, [progress]);
 
   if (!loaded) return null;
 

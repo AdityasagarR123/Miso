@@ -6,14 +6,19 @@ import {
   answerInLesson,
   answerInPractice,
   buildPracticeSet,
+  chooseCourse,
   completeLesson,
   completePractice,
+  courseProgress,
   currentStreak,
   dayKey,
   initialProgress,
   isLessonUnlocked,
   parseProgress,
 } from './progress.ts';
+
+const ES = 'es-from-en';
+const FR = 'fr-from-en';
 
 const exercise = (id) => ({ id });
 const lessons = [
@@ -22,50 +27,75 @@ const lessons = [
   { id: 'c', exercises: [exercise('c1')] },
 ];
 
+const withEs = (es, extra = {}) => ({
+  ...initialProgress,
+  ...extra,
+  courses: { [ES]: { completedLessons: [], mistakes: [], ...es } },
+});
+
 test('a right answer in a lesson earns XP and clears the mistake', () => {
-  const start = { ...initialProgress, mistakes: ['a1'] };
-  const next = answerInLesson(start, 'a1', true);
+  const next = answerInLesson(withEs({ mistakes: ['a1'] }), ES, 'a1', true);
   assert.equal(next.xp, 2);
   assert.equal(next.hearts, MAX_HEARTS);
-  assert.deepEqual(next.mistakes, []);
+  assert.deepEqual(courseProgress(next, ES).mistakes, []);
 });
 
 test('a wrong answer in a lesson costs a heart and is remembered once', () => {
-  let next = answerInLesson(initialProgress, 'a1', false);
-  next = answerInLesson(next, 'a1', false);
+  let next = answerInLesson(initialProgress, ES, 'a1', false);
+  next = answerInLesson(next, ES, 'a1', false);
   assert.equal(next.hearts, MAX_HEARTS - 2);
   assert.equal(next.xp, 0);
-  assert.deepEqual(next.mistakes, ['a1']);
+  assert.deepEqual(courseProgress(next, ES).mistakes, ['a1']);
 });
 
 test('hearts never drop below zero', () => {
-  const next = answerInLesson({ ...initialProgress, hearts: 0 }, 'a1', false);
+  const next = answerInLesson({ ...initialProgress, hearts: 0 }, ES, 'a1', false);
   assert.equal(next.hearts, 0);
 });
 
 test('practice earns hearts up to the maximum and never costs one', () => {
-  const low = { ...initialProgress, hearts: 1, mistakes: ['a1'] };
-  const right = answerInPractice(low, 'a1', true);
+  const low = withEs({ mistakes: ['a1'] }, { hearts: 1 });
+  const right = answerInPractice(low, ES, 'a1', true);
   assert.equal(right.hearts, 2);
-  assert.deepEqual(right.mistakes, []);
+  assert.deepEqual(courseProgress(right, ES).mistakes, []);
 
-  const wrong = answerInPractice(low, 'a2', false);
+  const wrong = answerInPractice(low, ES, 'a2', false);
   assert.equal(wrong.hearts, 1);
-  assert.deepEqual(wrong.mistakes, ['a1', 'a2']);
+  assert.deepEqual(courseProgress(wrong, ES).mistakes, ['a1', 'a2']);
 
-  assert.equal(answerInPractice(initialProgress, 'a1', true).hearts, MAX_HEARTS);
+  assert.equal(answerInPractice(initialProgress, ES, 'a1', true).hearts, MAX_HEARTS);
 });
 
 test('only the first completion of a lesson earns the bonus', () => {
-  const once = completeLesson(initialProgress, 'a', '2026-11-05');
-  const twice = completeLesson(once, 'a', '2026-11-05');
+  const once = completeLesson(initialProgress, ES, 'a', '2026-11-05');
+  const twice = completeLesson(once, ES, 'a', '2026-11-05');
   assert.equal(once.xp, 10);
   assert.equal(twice.xp, 10);
-  assert.deepEqual(twice.completedLessons, ['a']);
+  assert.deepEqual(courseProgress(twice, ES).completedLessons, ['a']);
+});
+
+test('lesson progress is separate per language, and XP is shared', () => {
+  let p = completeLesson(initialProgress, ES, 'a', '2026-11-05');
+  p = answerInLesson(p, ES, 'a1', false);
+  p = completeLesson(p, FR, 'a', '2026-11-05');
+  assert.deepEqual(courseProgress(p, ES).completedLessons, ['a']);
+  assert.deepEqual(courseProgress(p, FR).completedLessons, ['a']);
+  assert.deepEqual(courseProgress(p, ES).mistakes, ['a1']);
+  assert.deepEqual(courseProgress(p, FR).mistakes, []);
+  assert.equal(p.xp, 20);
+  assert.equal(p.hearts, MAX_HEARTS - 1);
+  assert.equal(p.streakCount, 1);
+});
+
+test('choosing a language keeps its progress and the others', () => {
+  const start = withEs({ completedLessons: ['a'] });
+  const chosen = chooseCourse(start, FR);
+  assert.equal(chosen.currentCourseId, FR);
+  assert.deepEqual(courseProgress(chosen, ES).completedLessons, ['a']);
 });
 
 test('streaks grow on new days, once a day, and restart after a gap', () => {
-  let p = completeLesson(initialProgress, 'a', '2026-11-05');
+  let p = completeLesson(initialProgress, ES, 'a', '2026-11-05');
   assert.equal(p.streakCount, 1);
   p = completePractice(p, '2026-11-05');
   assert.equal(p.streakCount, 1);
@@ -101,26 +131,25 @@ test('dayKey uses the local date with padding', () => {
 });
 
 test('lessons unlock one at a time', () => {
-  assert.equal(isLessonUnlocked(lessons, initialProgress, 'a'), true);
-  assert.equal(isLessonUnlocked(lessons, initialProgress, 'b'), false);
-  const p = { ...initialProgress, completedLessons: ['a'] };
-  assert.equal(isLessonUnlocked(lessons, p, 'b'), true);
-  assert.equal(isLessonUnlocked(lessons, p, 'c'), false);
-  assert.equal(isLessonUnlocked(lessons, p, 'missing'), false);
+  assert.equal(isLessonUnlocked(lessons, [], 'a'), true);
+  assert.equal(isLessonUnlocked(lessons, [], 'b'), false);
+  assert.equal(isLessonUnlocked(lessons, ['a'], 'b'), true);
+  assert.equal(isLessonUnlocked(lessons, ['a'], 'c'), false);
+  assert.equal(isLessonUnlocked(lessons, ['a'], 'missing'), false);
 });
 
 test('practice puts mistakes first and skips locked lessons', () => {
-  const p = { ...initialProgress, mistakes: ['a2'] };
+  const current = { completedLessons: [], mistakes: ['a2'] };
   assert.deepEqual(
-    buildPracticeSet(lessons, p, 5).map((e) => e.id),
+    buildPracticeSet(lessons, current, 5).map((e) => e.id),
     ['a2', 'a1'],
   );
 });
 
 test('practice respects its limit and includes newly unlocked lessons', () => {
-  const p = { ...initialProgress, completedLessons: ['a'], mistakes: ['b2'] };
+  const current = { completedLessons: ['a'], mistakes: ['b2'] };
   assert.deepEqual(
-    buildPracticeSet(lessons, p, 3).map((e) => e.id),
+    buildPracticeSet(lessons, current, 3).map((e) => e.id),
     ['b2', 'a1', 'a2'],
   );
 });
@@ -131,10 +160,38 @@ test('saved progress round-trips', () => {
     hearts: 3,
     streakCount: 2,
     lastActiveDay: '2026-11-05',
-    completedLessons: ['a'],
-    mistakes: ['b1'],
+    currentCourseId: FR,
+    courses: {
+      [ES]: { completedLessons: ['a'], mistakes: ['b1'] },
+      [FR]: { completedLessons: [], mistakes: [] },
+    },
   };
   assert.deepEqual(parseProgress(JSON.stringify(p)), p);
+});
+
+test('a save from before languages becomes Spanish progress', () => {
+  const old = JSON.stringify({
+    xp: 30,
+    hearts: 4,
+    streakCount: 2,
+    lastActiveDay: '2026-11-05',
+    completedLessons: ['greetings'],
+    mistakes: ['introductions-1'],
+  });
+  assert.deepEqual(parseProgress(old), {
+    xp: 30,
+    hearts: 4,
+    streakCount: 2,
+    lastActiveDay: '2026-11-05',
+    currentCourseId: ES,
+    courses: {
+      [ES]: { completedLessons: ['greetings'], mistakes: ['introductions-1'] },
+    },
+  });
+});
+
+test('a new learner has not chosen a language', () => {
+  assert.equal(parseProgress(null).currentCourseId, null);
 });
 
 test('damaged saved progress falls back safely', () => {
@@ -149,8 +206,11 @@ test('damaged saved progress falls back safely', () => {
       hearts: 99,
       streakCount: 'x',
       lastActiveDay: 'nope',
-      completedLessons: ['a', 1],
-      mistakes: 'b',
+      currentCourseId: 7,
+      courses: {
+        [ES]: { completedLessons: ['a', 1], mistakes: 'b' },
+        [FR]: 'broken',
+      },
     }),
   );
   assert.deepEqual(fixed, {
@@ -158,7 +218,7 @@ test('damaged saved progress falls back safely', () => {
     hearts: MAX_HEARTS,
     streakCount: 0,
     lastActiveDay: null,
-    completedLessons: ['a'],
-    mistakes: [],
+    currentCourseId: null,
+    courses: { [ES]: { completedLessons: ['a'], mistakes: [] } },
   });
 });
