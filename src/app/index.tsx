@@ -25,7 +25,7 @@ export default function HomeScreen() {
   return (
     <Screen>
       <View style={styles.header}>
-        <Text style={styles.title}>Miso</Text>
+        <Text style={styles.title}>Viso</Text>
         <Text style={styles.tagline}>
           Learn a language in a few minutes a day, completely free.
         </Text>

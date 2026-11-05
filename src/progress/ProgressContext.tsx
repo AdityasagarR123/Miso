@@ -19,7 +19,7 @@ import {
   type Progress,
 } from './progress';
 
-const STORAGE_KEY = 'miso.progress';
+const STORAGE_KEY = 'viso.progress';
 
 type ProgressContextValue = {
   progress: Progress;

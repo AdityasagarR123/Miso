@@ -21,7 +21,7 @@ export default function RootLayout() {
           headerTintColor: colors.brown,
         }}
       >
-        <Stack.Screen name="index" options={{ headerShown: false, title: 'Miso' }} />
+        <Stack.Screen name="index" options={{ headerShown: false, title: 'Viso' }} />
         <Stack.Screen name="lesson/[lessonId]" options={{ title: 'Lesson' }} />
         <Stack.Screen name="practice" options={{ title: 'Practice' }} />
       </Stack>

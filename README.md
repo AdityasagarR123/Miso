@@ -1,14 +1,14 @@
-# Miso
+# Viso
 
 **Learn a language in a few minutes a day, completely free.**
 
-Miso is a playful language-learning website, with phone apps to follow, guided by a cheeky red panda mascot. Lessons are short, progress feels like a game, and every part of learning is free. The first course will be **Spanish**.
+Viso is a playful language-learning website, with phone apps to follow, guided by a cheeky red panda mascot. Lessons are short, progress feels like a game, and every part of learning is free. The first course will be **Spanish**.
 
 > **Status:** Early development. The first Spanish unit is playable with XP, hearts, streaks and saved progress. Accounts, the animated mascot and more are still to come.
 
 ## Completely free
 
-Miso is going to be **completely free**:
+Viso is going to be **completely free**:
 
 - No subscriptions
 - No premium tier
@@ -22,7 +22,7 @@ Miso is going to be **completely free**:
 - **Hearts:** mistakes cost a heart, and practice earns them back
 - **XP and streaks:** daily goals that make it easy to keep coming back
 - **Smart review:** the things you get wrong come back until they stick
-- **Miso the red panda:** a mascot who cheers, sulks and celebrates along with you
+- **Viso the red panda:** a mascot who cheers, sulks and celebrates along with you
 
 ## Planned tech stack
 
@@ -44,7 +44,7 @@ npm install
 npm run web
 ```
 
-This starts Miso and lets you open it in your browser. The web version comes first, so that's the main way to run it for now.
+This starts Viso and lets you open it in your browser. The web version comes first, so that's the main way to run it for now.
 
 ## Roadmap
 
@@ -69,10 +69,10 @@ This starts Miso and lets you open it in your browser. The web version comes fir
 - [x] Add review of past mistakes
 - [ ] Add sound effects
 
-### Phase 4: Bringing Miso to life
-- [ ] Animate Miso in Rive: idle, correct, wrong, streak warning and celebration
+### Phase 4: Bringing Viso to life
+- [ ] Animate Viso in Rive: idle, correct, wrong, streak warning and celebration
 - [ ] Trigger reactions from what happens in a lesson
-- [ ] Move Miso along the lesson path
+- [ ] Move Viso along the lesson path
 
 ### Phase 5: Accounts and sync
 - [ ] Add sign-up and login
@@ -82,7 +82,7 @@ This starts Miso and lets you open it in your browser. The web version comes fir
 ### Phase 6: Web launch
 - [ ] Test with a small group of learners and fix what they find
 - [ ] Add audio pronunciation for lessons
-- [ ] Publish the Miso website
+- [ ] Publish the Viso website
 
 ### Phase 7: Phone apps
 - [ ] Test and adapt the app on Android and iOS
