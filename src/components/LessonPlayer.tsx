@@ -38,9 +38,9 @@ export function LessonPlayer({
 
   if (index >= total) {
     return (
-      <Screen>
+      <Screen decorated>
         <ProgressBar progress={1} />
-        <StatsBar />
+        <StatsBar large />
         <Text style={styles.title}>Lesson complete!</Text>
         <Text style={styles.body}>
           You got {correctCount} of {total} right in {lesson.title} and earned{' '}
@@ -64,8 +64,8 @@ export function LessonPlayer({
 
   if (progress.hearts === 0 && !result) {
     return (
-      <Screen>
-        <StatsBar />
+      <Screen decorated>
+        <StatsBar large />
         <Text style={styles.title}>Out of hearts</Text>
         <Text style={styles.body}>
           Practice for free to earn hearts back, then try this lesson again.
@@ -101,9 +101,9 @@ export function LessonPlayer({
   };
 
   return (
-    <Screen>
+    <Screen decorated>
       <ProgressBar progress={(index + (result ? 1 : 0)) / total} />
-      <StatsBar />
+      <StatsBar large />
       <ExerciseView
         key={`${attempt}-${exercise.id}`}
         exercise={exercise}

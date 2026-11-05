@@ -1,3 +1,4 @@
+import { useRouter } from 'expo-router';
 import { useState } from 'react';
 import {
   Pressable,
@@ -7,7 +8,7 @@ import {
   View,
 } from 'react-native';
 
-import { MAP_THEMES } from '@/components/map/mapThemes';
+import { LANDING_THEME_COUNT, MAP_THEMES } from '@/components/map/mapThemes';
 import { RoadMap, type RoadStop } from '@/components/map/RoadMap';
 import { COURSES } from '@/course/courses';
 import { LEVEL_PLAN } from '@/course/levels';
@@ -20,6 +21,7 @@ type TrailMapProps = {
 
 /** The landing page's map: a preview of all five language worlds. */
 export function TrailMap({ startLabel, onStart }: TrailMapProps) {
+  const router = useRouter();
   const { width, height } = useWindowDimensions();
   const [themeIndex, setThemeIndex] = useState(0);
   const theme = MAP_THEMES[themeIndex];
@@ -60,7 +62,7 @@ export function TrailMap({ startLabel, onStart }: TrailMapProps) {
       </Text>
 
       <View style={styles.tabs}>
-        {MAP_THEMES.map((item, index) => {
+        {MAP_THEMES.slice(0, LANDING_THEME_COUNT).map((item, index) => {
           const selected = index === themeIndex;
           return (
             <Pressable
@@ -80,6 +82,13 @@ export function TrailMap({ startLabel, onStart }: TrailMapProps) {
             </Pressable>
           );
         })}
+        <Pressable
+          accessibilityRole="button"
+          onPress={() => router.push('/languages')}
+          style={styles.tab}
+        >
+          <Text style={styles.tabText}>All 10 languages</Text>
+        </Pressable>
       </View>
 
       <RoadMap

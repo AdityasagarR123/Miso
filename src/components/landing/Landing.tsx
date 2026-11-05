@@ -321,12 +321,12 @@ export function Landing() {
           </Section>
 
           <Section
-            title="Five languages. One path."
+            title="Ten languages. One path."
             subtitle={`Every language follows the same ${LEVEL_PLAN.length} levels.`}
             onLayoutY={remember('languages')}
           >
             <View style={styles.grid}>
-              {COURSES.map((item) => (
+              {COURSES.slice(0, 5).map((item) => (
                 <View key={item.id} style={styles.languageCard}>
                   <Text style={styles.cardGreeting}>{item.greeting}</Text>
                   <Text style={styles.cardTitle}>{item.title}</Text>
@@ -337,6 +337,12 @@ export function Landing() {
                   </Text>
                 </View>
               ))}
+            </View>
+            <View style={styles.allLanguages}>
+              <Pill
+                label="See all 10 languages"
+                onPress={() => router.push('/languages')}
+              />
             </View>
           </Section>
 
@@ -394,7 +400,11 @@ export function Landing() {
                 <Pressable
                   key={section}
                   accessibilityRole="button"
-                  onPress={() => goTo(section)}
+                  onPress={() =>
+                    section === 'languages'
+                      ? router.push('/languages')
+                      : goTo(section)
+                  }
                   style={styles.navLink}
                 >
                   <Text style={styles.navLinkText}>{label}</Text>
@@ -634,6 +644,10 @@ const styles = StyleSheet.create({
     color: colors.brown,
     fontSize: 15,
     lineHeight: 22,
+  },
+  allLanguages: {
+    alignItems: 'center',
+    marginTop: spacing.sm,
   },
   promises: {
     alignSelf: 'center',

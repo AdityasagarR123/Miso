@@ -8,13 +8,18 @@ Viso is a playful language-learning website, with phone apps to follow, guided b
 
 ## Languages and levels
 
-Viso will teach five languages, each taught from English:
+Viso will teach ten languages, each taught from English:
 
 - Spanish (Level 1 is ready)
 - French (coming soon)
 - German (coming soon)
 - Japanese (coming soon)
 - Korean (coming soon)
+- Italian (coming soon)
+- Portuguese (coming soon)
+- Mandarin Chinese (coming soon)
+- Hindi (coming soon)
+- Arabic (coming soon)
 
 Every language follows the same 10 levels, set across five map regions:
 
@@ -105,6 +110,9 @@ This starts Viso and lets you open it in your browser. The landing page is at `/
 - [ ] Finish Spanish levels 2 to 10
 - [ ] Write French and German
 - [ ] Write Japanese and Korean, including script lessons
+- [ ] Write Italian and Portuguese
+- [ ] Write Mandarin Chinese, Hindi and Arabic, including script lessons
+- [ ] Support right-to-left exercises for Arabic
 - [ ] Have fluent speakers review every course
 
 ### Phase 5: Accounts and sync

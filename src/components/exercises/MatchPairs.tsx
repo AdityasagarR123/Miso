@@ -96,8 +96,10 @@ const styles = StyleSheet.create({
   },
   prompt: {
     color: colors.brown,
-    fontSize: 24,
+    fontSize: 30,
     fontWeight: '800',
+    lineHeight: 36,
+    textAlign: 'center',
   },
   columns: {
     flexDirection: 'row',

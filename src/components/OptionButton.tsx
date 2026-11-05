@@ -38,19 +38,20 @@ const styles = StyleSheet.create({
   option: {
     alignItems: 'center',
     borderRadius: radius.md,
+    borderBottomWidth: 6,
     borderWidth: 2,
     justifyContent: 'center',
-    minHeight: 48,
+    minHeight: 56,
     paddingHorizontal: spacing.md,
     paddingVertical: spacing.sm,
   },
   idle: {
-    backgroundColor: colors.white,
-    borderColor: colors.border,
+    backgroundColor: '#FFF9EE',
+    borderColor: colors.brown,
   },
   selected: {
-    backgroundColor: colors.tealLight,
-    borderColor: colors.tealDark,
+    backgroundColor: '#FFF9EE',
+    borderColor: colors.teal,
   },
   correct: {
     backgroundColor: colors.tealLight,
@@ -65,8 +66,8 @@ const styles = StyleSheet.create({
   },
   label: {
     color: colors.brown,
-    fontSize: 16,
-    fontWeight: '600',
+    fontSize: 18,
+    fontWeight: '700',
     textAlign: 'center',
   },
 });

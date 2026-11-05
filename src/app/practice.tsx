@@ -36,9 +36,9 @@ function PracticeSession() {
   if (index >= exercises.length) {
     const earned = progress.hearts - startHearts;
     return (
-      <Screen>
+      <Screen decorated>
         <ProgressBar progress={1} />
-        <StatsBar />
+        <StatsBar large />
         <Text style={styles.title}>Practice complete!</Text>
         <Text style={styles.body}>
           You earned {earned} {earned === 1 ? 'heart' : 'hearts'}.
@@ -52,9 +52,9 @@ function PracticeSession() {
   const isLast = index + 1 === exercises.length;
 
   return (
-    <Screen>
+    <Screen decorated>
       <ProgressBar progress={(index + (result ? 1 : 0)) / exercises.length} />
-      <StatsBar />
+      <StatsBar large />
       <ExerciseView
         key={exercise.id}
         exercise={exercise}

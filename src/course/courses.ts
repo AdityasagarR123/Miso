@@ -16,13 +16,18 @@ function comingSoon(
   };
 }
 
-/** The five languages Viso teaches. */
+/** The ten languages Viso teaches. */
 export const COURSES: Course[] = [
   spanishCourse,
   comingSoon('fr', 'French', 'Bonjour !'),
   comingSoon('de', 'German', 'Hallo!'),
   comingSoon('ja', 'Japanese', 'こんにちは'),
   comingSoon('ko', 'Korean', '안녕하세요'),
+  comingSoon('it', 'Italian', 'Ciao!'),
+  comingSoon('pt', 'Portuguese', 'Olá!'),
+  comingSoon('zh', 'Mandarin Chinese', '你好'),
+  comingSoon('hi', 'Hindi', 'नमस्ते'),
+  comingSoon('ar', 'Arabic', 'مرحبا'),
 ];
 
 export function courseById(id: string | null): Course | null {

@@ -43,13 +43,15 @@ const styles = StyleSheet.create({
   button: {
     alignItems: 'center',
     borderRadius: radius.md,
-    minHeight: 48,
+    minHeight: 54,
     justifyContent: 'center',
     paddingHorizontal: spacing.lg,
     paddingVertical: spacing.sm,
   },
   primary: {
     backgroundColor: colors.tealDark,
+    borderBottomColor: '#075550',
+    borderBottomWidth: 6,
   },
   secondary: {
     backgroundColor: colors.white,
@@ -63,8 +65,8 @@ const styles = StyleSheet.create({
     opacity: 0.5,
   },
   label: {
-    fontSize: 16,
-    fontWeight: '700',
+    fontSize: 18,
+    fontWeight: '800',
   },
   primaryLabel: {
     color: colors.white,

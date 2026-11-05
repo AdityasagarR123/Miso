@@ -24,13 +24,16 @@ export function ProgressBar({ progress }: ProgressBarProps) {
 
 const styles = StyleSheet.create({
   track: {
-    backgroundColor: colors.white,
+    backgroundColor: '#EFE3CC',
+    borderColor: '#EFE3CC',
     borderRadius: radius.pill,
-    height: 12,
+    borderWidth: 3,
+    height: 20,
     overflow: 'hidden',
   },
   fill: {
-    backgroundColor: colors.teal,
+    backgroundColor: colors.tealDark,
+    borderRadius: radius.pill,
     height: '100%',
   },
 });
