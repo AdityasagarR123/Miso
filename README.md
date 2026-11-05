@@ -2,7 +2,7 @@
 
 **Learn a language in a few minutes a day, completely free.**
 
-Miso is a playful language-learning app for mobile, guided by a cheeky red panda mascot. Lessons are short, progress feels like a game, and every part of learning is free. The first course will be **Spanish**.
+Miso is a playful language-learning website, with phone apps to follow, guided by a cheeky red panda mascot. Lessons are short, progress feels like a game, and every part of learning is free. The first course will be **Spanish**.
 
 > **Status:** Early development. The project is set up, but lessons and the features below aren't built yet.
 
@@ -30,10 +30,21 @@ These choices may change as the project grows.
 
 | Area | Choice | Why |
 |---|---|---|
-| Mobile app | React Native with Expo | One React codebase for Android and iOS |
+| App | React Native with Expo | One React codebase for the web now, and Android and iOS later |
 | Language | TypeScript | Catches mistakes early as the app grows |
 | Mascot animation | Rive | Small files and animations that react live to the learner |
 | Backend | Supabase | Accounts and progress sync across devices |
+
+## Getting started
+
+You'll need [Node.js](https://nodejs.org). Then run:
+
+```bash
+npm install
+npm run web
+```
+
+This starts Miso and lets you open it in your browser. The web version comes first, so that's the main way to run it for now.
 
 ## Roadmap
 
@@ -42,7 +53,7 @@ These choices may change as the project grows.
 - [x] Choose the first language course: Spanish
 - [x] Define the format for courses, lessons and exercises
 - [ ] Finish the mascot, colors and app icon
-- [ ] Set up navigation and shared UI components
+- [x] Set up navigation and shared UI components
 
 ### Phase 2: First playable lesson
 - [ ] Build the lesson path screen
@@ -53,7 +64,7 @@ These choices may change as the project grows.
 
 ### Phase 3: Game loop
 - [ ] Add XP, hearts and daily streaks
-- [ ] Save progress on the device
+- [ ] Save progress locally
 - [ ] Add a practice mode for earning hearts back
 - [ ] Add review of past mistakes
 - [ ] Add sound effects
@@ -62,16 +73,20 @@ These choices may change as the project grows.
 - [ ] Animate Miso in Rive: idle, correct, wrong, streak warning and celebration
 - [ ] Trigger reactions from what happens in a lesson
 - [ ] Move Miso along the lesson path
-- [ ] Add streak reminder notifications
 
 ### Phase 5: Accounts and sync
 - [ ] Add sign-up and login
 - [ ] Sync progress across devices
 - [ ] Add a learner profile with stats
 
-### Phase 6: Launch
+### Phase 6: Web launch
 - [ ] Test with a small group of learners and fix what they find
 - [ ] Add audio pronunciation for lessons
+- [ ] Publish the Miso website
+
+### Phase 7: Phone apps
+- [ ] Test and adapt the app on Android and iOS
+- [ ] Add streak reminder notifications
 - [ ] Release on Google Play and the App Store
 
 ### Later
