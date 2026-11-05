@@ -6,32 +6,50 @@ import { colors, radius, spacing } from '@/theme';
 // Sideways offsets that make the lessons wind like a path.
 const OFFSETS = [0, 56, 0, -56];
 
+export type LessonStatus = 'done' | 'open' | 'locked';
+
+const STATUS_LABELS: Record<LessonStatus, string> = {
+  done: 'completed',
+  open: 'ready to start',
+  locked: 'locked',
+};
+
 type LessonPathProps = {
   lessons: Lesson[];
+  statusFor: (lesson: Lesson) => LessonStatus;
   onSelect: (lesson: Lesson) => void;
 };
 
-export function LessonPath({ lessons, onSelect }: LessonPathProps) {
+export function LessonPath({ lessons, statusFor, onSelect }: LessonPathProps) {
   return (
     <View style={styles.path}>
-      {lessons.map((lesson, index) => (
-        <Pressable
-          key={lesson.id}
-          accessibilityRole="button"
-          accessibilityLabel={`Lesson ${index + 1}: ${lesson.title}`}
-          onPress={() => onSelect(lesson)}
-          style={({ pressed }) => [
-            styles.stop,
-            { transform: [{ translateX: OFFSETS[index % OFFSETS.length] }] },
-            pressed && styles.pressed,
-          ]}
-        >
-          <View style={styles.circle}>
-            <Text style={styles.number}>{index + 1}</Text>
-          </View>
-          <Text style={styles.title}>{lesson.title}</Text>
-        </Pressable>
-      ))}
+      {lessons.map((lesson, index) => {
+        const status = statusFor(lesson);
+        const locked = status === 'locked';
+
+        return (
+          <Pressable
+            key={lesson.id}
+            accessibilityRole="button"
+            accessibilityLabel={`Lesson ${index + 1}: ${lesson.title}, ${STATUS_LABELS[status]}`}
+            accessibilityState={{ disabled: locked }}
+            disabled={locked}
+            onPress={() => onSelect(lesson)}
+            style={({ pressed }) => [
+              styles.stop,
+              { transform: [{ translateX: OFFSETS[index % OFFSETS.length] }] },
+              pressed && styles.pressed,
+            ]}
+          >
+            <View style={[styles.circle, styles[status]]}>
+              <Text style={[styles.mark, locked && styles.lockedMark]}>
+                {status === 'done' ? '✓' : locked ? '🔒' : index + 1}
+              </Text>
+            </View>
+            <Text style={styles.title}>{lesson.title}</Text>
+          </Pressable>
+        );
+      })}
     </View>
   );
 }
@@ -51,16 +69,27 @@ const styles = StyleSheet.create({
   },
   circle: {
     alignItems: 'center',
-    backgroundColor: colors.rustDark,
     borderRadius: radius.pill,
     height: 72,
     justifyContent: 'center',
     width: 72,
   },
-  number: {
+  done: {
+    backgroundColor: colors.tealDark,
+  },
+  open: {
+    backgroundColor: colors.rustDark,
+  },
+  locked: {
+    backgroundColor: colors.border,
+  },
+  mark: {
     color: colors.white,
     fontSize: 28,
     fontWeight: '800',
+  },
+  lockedMark: {
+    fontSize: 24,
   },
   title: {
     color: colors.brown,

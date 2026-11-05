@@ -1,6 +1,7 @@
 import { Stack } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 
+import { ProgressProvider } from '@/progress/ProgressContext';
 import { colors } from '@/theme';
 
 // Keeps the home screen behind a lesson that was opened by link or refreshed,
@@ -11,7 +12,7 @@ export const unstable_settings = {
 
 export default function RootLayout() {
   return (
-    <>
+    <ProgressProvider>
       <Stack
         screenOptions={{
           contentStyle: { backgroundColor: colors.cream },
@@ -22,8 +23,9 @@ export default function RootLayout() {
       >
         <Stack.Screen name="index" options={{ headerShown: false, title: 'Miso' }} />
         <Stack.Screen name="lesson/[lessonId]" options={{ title: 'Lesson' }} />
+        <Stack.Screen name="practice" options={{ title: 'Practice' }} />
       </Stack>
       <StatusBar style="dark" />
-    </>
+    </ProgressProvider>
   );
 }

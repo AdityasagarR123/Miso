@@ -1,4 +1,4 @@
-import type { Course } from './types';
+import type { Course, Lesson } from './types';
 
 export const spanishCourse: Course = {
   id: 'es-from-en',
@@ -112,3 +112,8 @@ export const spanishCourse: Course = {
     },
   ],
 };
+
+/** Every lesson in course order, across units. */
+export const allLessons: Lesson[] = spanishCourse.units.flatMap(
+  (unit) => unit.lessons,
+);

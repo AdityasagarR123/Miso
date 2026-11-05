@@ -4,21 +4,28 @@ import { StyleSheet, Text } from 'react-native';
 import { Button } from '@/components/Button';
 import { LessonPlayer } from '@/components/LessonPlayer';
 import { Screen } from '@/components/Screen';
-import { spanishCourse } from '@/course/spanish';
+import { allLessons } from '@/course/spanish';
+import { isLessonUnlocked } from '@/progress/progress';
+import { useProgress } from '@/progress/ProgressContext';
 import { colors } from '@/theme';
 
 export default function LessonScreen() {
   const router = useRouter();
+  const { progress } = useProgress();
   const { lessonId } = useLocalSearchParams<{ lessonId: string }>();
-  const lesson = spanishCourse.units
-    .flatMap((unit) => unit.lessons)
-    .find((candidate) => candidate.id === lessonId);
+  const lesson = allLessons.find((candidate) => candidate.id === lessonId);
 
-  if (!lesson) {
+  if (!lesson || !isLessonUnlocked(allLessons, progress, lesson.id)) {
     return (
       <Screen>
-        <Stack.Screen options={{ title: 'Lesson not found' }} />
-        <Text style={styles.body}>We couldn't find that lesson.</Text>
+        <Stack.Screen
+          options={{ title: lesson ? 'Lesson locked' : 'Lesson not found' }}
+        />
+        <Text style={styles.body}>
+          {lesson
+            ? 'Finish the lesson before this one to unlock it.'
+            : "We couldn't find that lesson."}
+        </Text>
         <Button label="Back to lessons" onPress={() => router.replace('/')} />
       </Screen>
     );

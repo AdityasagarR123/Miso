@@ -1,13 +1,26 @@
 import { useRouter } from 'expo-router';
 import { StyleSheet, Text, View } from 'react-native';
 
-import { LessonPath } from '@/components/LessonPath';
+import { Button } from '@/components/Button';
+import { LessonPath, type LessonStatus } from '@/components/LessonPath';
 import { Screen } from '@/components/Screen';
-import { spanishCourse } from '@/course/spanish';
+import { StatsBar } from '@/components/StatsBar';
+import { allLessons, spanishCourse } from '@/course/spanish';
+import type { Lesson } from '@/course/types';
+import { isLessonUnlocked } from '@/progress/progress';
+import { useProgress } from '@/progress/ProgressContext';
 import { colors, spacing } from '@/theme';
 
 export default function HomeScreen() {
   const router = useRouter();
+  const { progress } = useProgress();
+
+  const statusFor = (lesson: Lesson): LessonStatus => {
+    if (progress.completedLessons.includes(lesson.id)) return 'done';
+    return isLessonUnlocked(allLessons, progress, lesson.id) ? 'open' : 'locked';
+  };
+
+  const mistakeCount = progress.mistakes.length;
 
   return (
     <Screen>
@@ -18,6 +31,8 @@ export default function HomeScreen() {
         </Text>
       </View>
 
+      <StatsBar />
+
       <Text style={styles.courseTitle}>{spanishCourse.title}</Text>
 
       {spanishCourse.units.map((unit) => (
@@ -25,6 +40,7 @@ export default function HomeScreen() {
           <Text style={styles.unitTitle}>{unit.title}</Text>
           <LessonPath
             lessons={unit.lessons}
+            statusFor={statusFor}
             onSelect={(lesson) =>
               router.push({
                 pathname: '/lesson/[lessonId]',
@@ -34,6 +50,16 @@ export default function HomeScreen() {
           />
         </View>
       ))}
+
+      <Button
+        label={
+          mistakeCount > 0
+            ? `Practice (${mistakeCount} to review)`
+            : 'Practice'
+        }
+        variant="secondary"
+        onPress={() => router.push('/practice')}
+      />
     </Screen>
   );
 }
