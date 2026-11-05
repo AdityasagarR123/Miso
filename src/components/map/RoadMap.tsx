@@ -10,6 +10,7 @@ import {
 } from 'react-native';
 import Svg, { Circle, Ellipse, G, Path, Rect, Text as SvgText } from 'react-native-svg';
 
+import { useGentleMotion } from '@/components/gentleMotion';
 import { colors, radius, spacing } from '@/theme';
 
 import { Cloud, FinishFlag, Sparkle, Squiggle } from './Doodles';
@@ -179,6 +180,7 @@ export function RoadMap({
 }: RoadMapProps) {
   const { width, height } = useWindowDimensions();
   const isWide = width >= 800;
+  const bob = useGentleMotion('bob');
 
   const sideMargin = isWide ? 12 : spacing.md;
   const availableWidth = width - sideMargin * 2;
@@ -321,12 +323,14 @@ export function RoadMap({
             },
           ]}
         >
-          <Image
-            accessibilityLabel="Viso the red panda, standing at your place on the road"
-            source={LOGO_FULL}
-            resizeMode="contain"
-            style={styles.mascotImage}
-          />
+          <View style={[styles.mascotImage, bob]}>
+            <Image
+              accessibilityLabel="Viso the red panda, standing at your place on the road"
+              source={LOGO_FULL}
+              resizeMode="contain"
+              style={styles.mascotImage}
+            />
+          </View>
         </View>
       ) : null}
     </View>

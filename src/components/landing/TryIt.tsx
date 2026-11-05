@@ -10,6 +10,7 @@ import {
 } from 'react-native';
 
 import { celebrate } from '@/components/Confetti';
+import { useGentleMotion } from '@/components/gentleMotion';
 import { colors, radius, spacing } from '@/theme';
 
 import { DanglingLegs } from './VisoParts';
@@ -37,6 +38,7 @@ export function TryIt() {
   const [wordIndex, setWordIndex] = useState(0);
   const [picked, setPicked] = useState<string | null>(null);
   const [cheering, setCheering] = useState(false);
+  const sway = useGentleMotion('sway');
   const { width } = useWindowDimensions();
   const visoWidth = width >= 800 ? 170 : 120;
   // The art is cropped above Viso's feet, where the drawn legs take over.
@@ -127,6 +129,7 @@ export function TryIt() {
           { transform: [{ translateY: cheering ? -22 : 0 }], width: visoWidth },
         ]}
       >
+        <View style={sway}>
         <View style={[styles.visoCrop, { height: visoHeight }]}>
           <Image
             accessibilityLabel="Viso the red panda, sitting on the card"
@@ -134,6 +137,7 @@ export function TryIt() {
             resizeMode="contain"
             style={{ height: visoWidth * (690 / 732), width: visoWidth }}
           />
+        </View>
         </View>
         <View style={styles.legs}>
           <DanglingLegs width={visoWidth * 0.42} />

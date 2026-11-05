@@ -11,6 +11,7 @@ import {
 } from 'react-native';
 import Svg, { Circle, Ellipse, Path } from 'react-native-svg';
 
+import { useGentleMotion } from '@/components/gentleMotion';
 import { KeyedVideo } from '@/components/KeyedVideo';
 import { themeForCourse } from '@/components/map/mapThemes';
 import { COURSES } from '@/course/courses';
@@ -23,18 +24,6 @@ const SLIDE = {
   transitionDuration: '180ms',
   transitionProperty: 'transform',
 } as ViewStyle;
-
-// CSS keyframes keep the bubbles drifting without using animation frames.
-const FLOAT = {
-  animationDirection: 'alternate',
-  animationDuration: '2.6s',
-  animationIterationCount: 'infinite',
-  animationKeyframes: {
-    from: { transform: 'translateY(0px)' },
-    to: { transform: 'translateY(-12px)' },
-  },
-  animationTimingFunction: 'ease-in-out',
-} as unknown as TextStyle;
 
 function LanguageRow({ course }: { course: Course }) {
   const router = useRouter();
@@ -66,19 +55,18 @@ function LanguageRow({ course }: { course: Course }) {
         </Svg>
       </View>
       <View style={styles.rowText}>
-        <Text style={styles.rowTitle}>{course.title}</Text>
-        <Text style={styles.rowStatus}>
-          {course.units.length} levels ready
+        <Text numberOfLines={1} style={styles.rowTitle}>{course.title}</Text>
+        <Text numberOfLines={1} style={[styles.rowGreeting, { color: theme.accent }]}>
+          {course.greeting}
         </Text>
       </View>
-      <Text numberOfLines={1} style={[styles.rowGreeting, { color: theme.accent }]}>
-        {course.greeting}
-      </Text>
     </Pressable>
   );
 }
 
 function Stage({ height }: { height: number }) {
+  const float = useGentleMotion('float') as TextStyle | undefined;
+
   return (
     <View style={[styles.stage, { height }]}>
       <View style={StyleSheet.absoluteFill}>
@@ -95,11 +83,11 @@ function Stage({ height }: { height: number }) {
         <KeyedVideo label="Viso the red panda studying at a desk while a butterfly flies around" />
       </View>
 
-      <Text style={[styles.bubble, styles.bubbleOne, FLOAT]}>¡Hola!</Text>
-      <Text style={[styles.bubble, styles.bubbleTwo, FLOAT, { animationDelay: '0.7s' } as TextStyle]}>
+      <Text style={[styles.bubble, styles.bubbleOne, float]}>¡Hola!</Text>
+      <Text style={[styles.bubble, styles.bubbleTwo, float, { animationDelay: '0.7s' } as TextStyle]}>
         こんにちは
       </Text>
-      <Text style={[styles.bubble, styles.bubbleThree, FLOAT, { animationDelay: '1.3s' } as TextStyle]}>
+      <Text style={[styles.bubble, styles.bubbleThree, float, { animationDelay: '1.3s' } as TextStyle]}>
         Ciao!
       </Text>
     </View>
@@ -120,21 +108,23 @@ export function LanguagesSection({
       onLayout={(event) => onLayoutY(event.nativeEvent.layout.y)}
       style={styles.band}
     >
+      <View style={styles.header}>
+        <Text style={styles.kicker}>{LEVEL_PLAN.length} LEVELS IN EVERY LANGUAGE</Text>
+        <Text
+          accessibilityRole="header"
+          style={[styles.title, !isWide && styles.titleSmall]}
+        >
+          Ten languages. One path.
+        </Text>
+        <Text style={styles.subtitle}>
+          Viso does the homework too. Pick a language and join in.
+        </Text>
+      </View>
+
       <View style={[styles.inner, isWide && styles.innerWide]}>
+        {isWide ? null : <Stage height={Math.min(width * 0.72, 330)} />}
+
         <View style={[styles.column, isWide && styles.columnLeft]}>
-          <Text style={styles.kicker}>{LEVEL_PLAN.length} LEVELS IN EVERY LANGUAGE</Text>
-          <Text
-            accessibilityRole="header"
-            style={[styles.title, !isWide && styles.titleSmall]}
-          >
-            Ten languages. One path.
-          </Text>
-          <Text style={styles.subtitle}>
-            Viso does the homework too. Pick a language and join in.
-          </Text>
-
-          {isWide ? null : <Stage height={Math.min(width * 0.72, 330)} />}
-
           <View style={styles.rows}>
             {COURSES.slice(0, 5).map((course) => (
               <LanguageRow key={course.id} course={course} />
@@ -152,7 +142,7 @@ export function LanguagesSection({
 
         {isWide ? (
           <View style={styles.columnRight}>
-            <Stage height={560} />
+            <Stage height={470} />
           </View>
         ) : null}
       </View>
@@ -167,6 +157,12 @@ const styles = StyleSheet.create({
     paddingHorizontal: spacing.md,
     paddingVertical: 64,
     width: '100%',
+  },
+  header: {
+    alignItems: 'center',
+    gap: spacing.xs,
+    marginBottom: spacing.lg,
+    maxWidth: 760,
   },
   inner: {
     gap: spacing.lg,
@@ -194,10 +190,11 @@ const styles = StyleSheet.create({
   },
   title: {
     color: colors.white,
-    fontSize: 40,
+    fontSize: 44,
     fontWeight: '800',
     letterSpacing: -1,
-    lineHeight: 46,
+    lineHeight: 50,
+    textAlign: 'center',
   },
   titleSmall: {
     fontSize: 36,
@@ -207,9 +204,11 @@ const styles = StyleSheet.create({
     color: '#D2F1EE',
     fontSize: 19,
     lineHeight: 28,
-    marginBottom: spacing.sm,
+    textAlign: 'center',
   },
   rows: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
     gap: spacing.sm,
   },
   row: {
@@ -218,9 +217,11 @@ const styles = StyleSheet.create({
     borderBottomColor: '#07403B',
     borderBottomWidth: 5,
     borderRadius: radius.md,
+    flexBasis: 210,
     flexDirection: 'row',
+    flexGrow: 1,
     gap: spacing.sm,
-    minHeight: 76,
+    minHeight: 84,
     overflow: 'hidden',
     paddingRight: spacing.md,
   },
@@ -241,13 +242,8 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: '800',
   },
-  rowStatus: {
-    color: colors.brown,
-    fontSize: 14,
-  },
   rowGreeting: {
-    flexShrink: 0,
-    fontSize: 19,
+    fontSize: 16,
     fontWeight: '800',
   },
   more: {

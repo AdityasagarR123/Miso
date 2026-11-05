@@ -26,6 +26,7 @@ import {
   StreakIcon,
   XpIcon,
 } from '@/components/GameIcons';
+import { useGentleMotion } from '@/components/gentleMotion';
 import { COURSES } from '@/course/courses';
 import { useProgress } from '@/progress/ProgressContext';
 import { colors, radius, spacing } from '@/theme';
@@ -212,6 +213,9 @@ export function Landing() {
   const scrollRef = useRef<ComponentRef<typeof ScrollView>>(null);
   const sectionY = useRef<Record<string, number>>({});
   const creamY = useRef(0);
+  const [pastHero, setPastHero] = useState(false);
+  const nod = useGentleMotion('nod');
+  const bob = useGentleMotion('bob');
 
   const isWide = width >= 800;
   const showNavLinks = width >= 900;
@@ -240,7 +244,17 @@ export function Landing() {
 
   return (
     <View style={styles.page}>
-      <ScrollView ref={scrollRef} contentContainerStyle={styles.scroll}>
+      <ScrollView
+        ref={scrollRef}
+        contentContainerStyle={styles.scroll}
+        scrollEventThrottle={32}
+        onScroll={(event) => {
+          // The nav turns to glass once it leaves the hero.
+          const heroEnd = Math.max(height, 640) - 90;
+          const past = event.nativeEvent.contentOffset.y > heroEnd;
+          if (past !== pastHero) setPastHero(past);
+        }}
+      >
         <View style={[styles.hero, { minHeight: Math.max(height, 640) }]}>
           <HeroArt width={width} />
 
@@ -249,11 +263,14 @@ export function Landing() {
               <Text accessibilityRole="header" style={headlineStyle}>
                 Viso
               </Text>
-              <Image
-                source={LOGO_HEAD}
-                resizeMode="contain"
-                style={{ height: headSize, marginHorizontal: 6, width: headSize }}
-              />
+              <View style={nod}>
+                <Image
+                  accessibilityLabel="Viso the red panda, nodding along"
+                  source={LOGO_HEAD}
+                  resizeMode="contain"
+                  style={{ height: headSize, marginHorizontal: 6, width: headSize }}
+                />
+              </View>
               <Text style={headlineStyle}>,{' '}</Text>
               <Text style={headlineStyle}>your free way to say</Text>
             </View>
@@ -308,13 +325,7 @@ export function Landing() {
             />
           </View>
 
-          <Section
-            title="Try it right now"
-            subtitle="No sign-up. One tap and you've started."
-            onLayoutY={remember('try')}
-          >
-            <TryIt />
-          </Section>
+          <LanguagesSection onLayoutY={remember('languages')} />
 
           <Section
             title="It feels like a game"
@@ -327,7 +338,13 @@ export function Landing() {
             </View>
           </Section>
 
-          <LanguagesSection onLayoutY={remember('languages')} />
+          <Section
+            title="Try it right now"
+            subtitle="No sign-up. One tap and you've started."
+            onLayoutY={remember('try')}
+          >
+            <TryIt />
+          </Section>
 
           <Section title="Free means free">
             <View style={styles.promises}>
@@ -342,12 +359,14 @@ export function Landing() {
         </View>
 
         <View style={styles.final}>
-          <Image
-            source={LOGO_FULL}
-            resizeMode="contain"
-            accessibilityLabel="Viso the red panda, waving"
-            style={styles.finalLogo}
-          />
+          <View style={bob}>
+            <Image
+              source={LOGO_FULL}
+              resizeMode="contain"
+              accessibilityLabel="Viso the red panda, waving"
+              style={styles.finalLogo}
+            />
+          </View>
           <Text accessibilityRole="header" style={styles.finalTitle}>
             Your first lesson is a few minutes away.
           </Text>
@@ -357,7 +376,7 @@ export function Landing() {
       </ScrollView>
 
       <View pointerEvents="box-none" style={styles.navWrap}>
-        <View style={styles.nav}>
+        <View style={[styles.nav, pastHero ? styles.navGlass : styles.navClear]}>
           <Pressable
             accessibilityRole="button"
             accessibilityLabel="Back to the top"
@@ -424,10 +443,10 @@ const styles = StyleSheet.create({
   },
   nav: {
     alignItems: 'center',
-    backgroundColor: colors.inkRaised,
-    borderColor: colors.inkBorder,
     borderRadius: radius.pill,
     borderWidth: 1,
+    transitionDuration: '260ms',
+    transitionProperty: 'background-color, border-color, box-shadow',
     flexDirection: 'row',
     justifyContent: 'space-between',
     maxWidth: 1040,
@@ -435,6 +454,21 @@ const styles = StyleSheet.create({
     paddingLeft: spacing.md,
     paddingRight: spacing.sm,
     width: '100%',
+  },
+  // Over the hero, the nav blends into the page.
+  navClear: {
+    backgroundColor: 'transparent',
+    borderColor: 'transparent',
+  },
+  // Past the hero, it becomes a glossy sheet of glass.
+  navGlass: {
+    backdropFilter: 'blur(16px) saturate(170%)',
+    backgroundColor: 'rgba(28, 20, 17, 0.62)',
+    backgroundImage:
+      'linear-gradient(180deg, rgba(255, 255, 255, 0.24), rgba(255, 255, 255, 0.03) 55%)',
+    borderColor: 'rgba(255, 255, 255, 0.3)',
+    boxShadow:
+      '0 10px 30px rgba(28, 20, 17, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.4)',
   },
   brand: {
     alignItems: 'center',

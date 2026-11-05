@@ -1,6 +1,7 @@
 import { useState, type ComponentType } from 'react';
 import { Image, Pressable, StyleSheet, Text, View, type ViewStyle } from 'react-native';
 
+import { useGentleMotion } from '@/components/gentleMotion';
 import { colors, radius, spacing } from '@/theme';
 
 import { GripPaw, Tail } from './VisoParts';
@@ -47,6 +48,7 @@ export function GameCard({
   hoverLine,
 }: GameCardProps) {
   const [hovered, setHovered] = useState(false);
+  const bob = useGentleMotion('bob');
   const headLean = pose === 'peek-right' ? '-8deg' : '8deg';
 
   return (
@@ -85,12 +87,14 @@ export function GameCard({
           },
         ]}
       >
-        <Image
-          accessibilityLabel="Viso peeking over the card"
-          source={LOGO_HEAD}
-          resizeMode="contain"
-          style={styles.headImage}
-        />
+        <View style={[styles.headImage, bob]}>
+          <Image
+            accessibilityLabel="Viso peeking over the card"
+            source={LOGO_HEAD}
+            resizeMode="contain"
+            style={styles.headImage}
+          />
+        </View>
       </View>
 
       <View style={[styles.card, { backgroundColor: color }]}>
