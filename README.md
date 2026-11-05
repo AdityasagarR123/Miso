@@ -4,7 +4,7 @@
 
 Miso is a playful language-learning app for mobile, guided by a cheeky red panda mascot. Lessons are short, progress feels like a game, and every part of learning is free.
 
-> **Status:** Early planning. The app isn't built yet, and everything below describes what we plan to make.
+> **Status:** Early development. The project is set up, but lessons and the features below aren't built yet.
 
 ## Completely free
 
@@ -38,7 +38,7 @@ These choices may change as the project grows.
 ## Roadmap
 
 ### Phase 1: Foundation
-- [ ] Set up the React Native and Expo project with TypeScript
+- [x] Set up the React Native and Expo project with TypeScript
 - [ ] Choose the first language course
 - [ ] Define the format for courses, lessons and exercises
 - [ ] Finish the mascot, colors and app icon
