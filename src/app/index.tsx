@@ -1,7 +1,7 @@
 import { useRouter } from 'expo-router';
 import { StyleSheet, Text, View } from 'react-native';
 
-import { Card } from '@/components/Card';
+import { LessonPath } from '@/components/LessonPath';
 import { Screen } from '@/components/Screen';
 import { spanishCourse } from '@/course/spanish';
 import { colors, spacing } from '@/theme';
@@ -21,21 +21,17 @@ export default function HomeScreen() {
       <Text style={styles.courseTitle}>{spanishCourse.title}</Text>
 
       {spanishCourse.units.map((unit) => (
-        <View key={unit.id} style={styles.unit}>
+        <View key={unit.id}>
           <Text style={styles.unitTitle}>{unit.title}</Text>
-          {unit.lessons.map((lesson) => (
-            <Card
-              key={lesson.id}
-              title={lesson.title}
-              subtitle={`${lesson.exercises.length} exercises`}
-              onPress={() =>
-                router.push({
-                  pathname: '/lesson/[lessonId]',
-                  params: { lessonId: lesson.id },
-                })
-              }
-            />
-          ))}
+          <LessonPath
+            lessons={unit.lessons}
+            onSelect={(lesson) =>
+              router.push({
+                pathname: '/lesson/[lessonId]',
+                params: { lessonId: lesson.id },
+              })
+            }
+          />
         </View>
       ))}
     </Screen>
@@ -61,9 +57,6 @@ const styles = StyleSheet.create({
     color: colors.brown,
     fontSize: 24,
     fontWeight: '800',
-  },
-  unit: {
-    gap: spacing.sm,
   },
   unitTitle: {
     color: colors.brown,

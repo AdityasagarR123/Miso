@@ -6,6 +6,9 @@ export const colors = {
   cream: '#FFF4E3',
   brown: '#3B2318',
   white: '#FFFFFF',
+  border: '#E5D5BD',
+  tealLight: '#D2F1EE',
+  rustLight: '#FBE0D3',
 };
 
 export const spacing = {
