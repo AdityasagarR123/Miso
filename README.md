@@ -4,7 +4,7 @@
 
 Miso is a playful language-learning website, with phone apps to follow, guided by a cheeky red panda mascot. Lessons are short, progress feels like a game, and every part of learning is free. The first course will be **Spanish**.
 
-> **Status:** Early development. Two sample Spanish lessons are playable with XP, hearts, streaks and saved progress. Accounts, the animated mascot and more are still to come.
+> **Status:** Early development. The first Spanish unit is playable with XP, hearts, streaks and saved progress. Accounts, the animated mascot and more are still to come.
 
 ## Completely free
 
@@ -60,7 +60,7 @@ This starts Miso and lets you open it in your browser. The web version comes fir
 - [x] Build multiple choice, matching and translation exercises
 - [x] Add answer checking and feedback
 - [x] Add a lesson-complete screen
-- [ ] Write the first unit of course content
+- [x] Write the first unit of course content
 
 ### Phase 3: Game loop
 - [x] Add XP, hearts and daily streaks

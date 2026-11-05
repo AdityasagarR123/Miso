@@ -26,7 +26,7 @@
     "ios": "expo start --ios",
     "web": "expo start --web",
     "typecheck": "tsc --noEmit",
-    "test": "node --test src/progress/progress.test.mjs"
+    "test": "node --test src/progress/progress.test.mjs src/course/spanish.test.mjs"
   },
   "private": true
 }
