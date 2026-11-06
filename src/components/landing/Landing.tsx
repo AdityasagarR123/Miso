@@ -34,6 +34,7 @@ import { useProgress } from '@/progress/ProgressContext';
 import { colors, radius, spacing } from '@/theme';
 
 import { HeroArt } from './HeroArt';
+import { FreeSection } from './FreeSection';
 import { InstallButton } from './InstallButton';
 import { LanguagesSection } from './LanguagesSection';
 import { TrailMap } from './TrailMap';
@@ -104,13 +105,6 @@ const GAME_FEATURES = [
     pose: 'peek-right' as CardPose,
     hoverLine: 'Biso never forgets a tricky word.',
   },
-];
-
-const FREE_PROMISES = [
-  'No subscriptions',
-  'No premium tier',
-  'No paywalled lessons',
-  'No paying to keep learning after mistakes',
 ];
 
 function useReducedMotion() {
@@ -368,21 +362,12 @@ export function Landing() {
           >
             <TryIt />
           </Section>
-
-          <Section title="Free means free">
-            <View style={styles.promises}>
-              {FREE_PROMISES.map((promise) => (
-                <View key={promise} style={styles.promise}>
-                  <Text style={styles.promiseMark}>✓</Text>
-                  <Text style={styles.promiseText}>{promise}</Text>
-                </View>
-              ))}
-            </View>
-          </Section>
         </View>
 
+        <FreeSection />
+
         <View style={styles.final}>
-          <View style={bob}>
+          <View style={[styles.finalBiso, bob]}>
             <Image
               source={LOGO_FULL}
               resizeMode="contain"
@@ -745,34 +730,16 @@ const styles = StyleSheet.create({
     fontSize: 15,
     lineHeight: 22,
   },
-  promises: {
-    alignSelf: 'center',
-    gap: spacing.md,
-    maxWidth: 560,
-    width: '100%',
-  },
-  promise: {
-    alignItems: 'center',
-    flexDirection: 'row',
-    gap: spacing.md,
-  },
-  promiseMark: {
-    color: colors.tealDark,
-    fontSize: 26,
-    fontWeight: '800',
-  },
-  promiseText: {
-    color: colors.brown,
-    flex: 1,
-    fontSize: 21,
-    fontWeight: '700',
-  },
   final: {
     alignItems: 'center',
     gap: spacing.lg,
+    paddingBottom: 64,
     paddingHorizontal: spacing.lg,
-    paddingVertical: 64,
     width: '100%',
+  },
+  // Biso stands across the edge of the orange band above.
+  finalBiso: {
+    marginTop: -80,
   },
   finalLogo: {
     height: 189,
