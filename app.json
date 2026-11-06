@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "Viso",
-    "slug": "viso",
+    "name": "Biso",
+    "slug": "biso",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -24,7 +24,7 @@
     "plugins": [
       "expo-router"
     ],
-    "scheme": "viso",
+    "scheme": "biso",
     "experiments": {
       "typedRoutes": true
     }

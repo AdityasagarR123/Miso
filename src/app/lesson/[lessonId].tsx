@@ -1,6 +1,7 @@
-import { Stack, useLocalSearchParams, useRouter } from 'expo-router';
+import { Redirect, Stack, useLocalSearchParams, useRouter } from 'expo-router';
 import { StyleSheet, Text } from 'react-native';
 
+import { useAuth } from '@/auth/AuthContext';
 import { Button } from '@/components/Button';
 import { LessonPlayer } from '@/components/LessonPlayer';
 import { Screen } from '@/components/Screen';
@@ -13,6 +14,16 @@ export default function LessonScreen() {
   const { course, lessons, current } = useProgress();
   const { lessonId } = useLocalSearchParams<{ lessonId: string }>();
   const lesson = lessons.find((candidate) => candidate.id === lessonId);
+  const { user, loading } = useAuth();
+
+  if (loading) return <Screen>{null}</Screen>;
+  if (!user) {
+    return (
+      <Redirect
+        href={{ pathname: '/sign-in', params: { next: `/lesson/${lessonId}` } }}
+      />
+    );
+  }
 
   if (!lesson || !isLessonUnlocked(lessons, current.completedLessons, lesson.id)) {
     return (

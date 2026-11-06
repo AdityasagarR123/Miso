@@ -1,7 +1,7 @@
 import { Stack } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 
-import '@/lib/install';
+import { AuthProvider } from '@/auth/AuthContext';
 import { ConfettiHost } from '@/components/Confetti';
 import { ProgressProvider } from '@/progress/ProgressContext';
 import { colors } from '@/theme';
@@ -14,6 +14,7 @@ export const unstable_settings = {
 
 export default function RootLayout() {
   return (
+    <AuthProvider>
     <ProgressProvider>
       <Stack
         screenOptions={{
@@ -23,15 +24,17 @@ export default function RootLayout() {
           headerTintColor: colors.brown,
         }}
       >
-        <Stack.Screen name="index" options={{ headerShown: false, title: 'Viso' }} />
-        <Stack.Screen name="learn" options={{ headerShown: false, title: 'Viso' }} />
+        <Stack.Screen name="index" options={{ headerShown: false, title: 'Biso' }} />
+        <Stack.Screen name="learn" options={{ headerShown: false, title: 'Biso' }} />
         <Stack.Screen name="level/[levelId]" options={{ title: 'Level' }} />
         <Stack.Screen name="lesson/[lessonId]" options={{ title: 'Lesson' }} />
         <Stack.Screen name="practice" options={{ title: 'Practice' }} />
+        <Stack.Screen name="sign-in" options={{ title: 'Sign in' }} />
         <Stack.Screen name="languages" options={{ headerShown: false, title: 'Languages' }} />
       </Stack>
       <StatusBar style="dark" />
       <ConfettiHost />
     </ProgressProvider>
+    </AuthProvider>
   );
 }

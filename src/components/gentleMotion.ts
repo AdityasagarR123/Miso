@@ -8,7 +8,7 @@ import {
 
 type MotionKind = 'nod' | 'bob' | 'sway' | 'float';
 
-// CSS keyframes keep Viso moving without using animation frames, so this stays
+// CSS keyframes keep Biso moving without using animation frames, so this stays
 // light and never competes with a hover effect on a parent element. The web
 // build only turns keyframes into real animations inside StyleSheet.create.
 const MOTIONS = StyleSheet.create<Record<MotionKind, ViewStyle>>({
@@ -54,7 +54,7 @@ const MOTIONS = StyleSheet.create<Record<MotionKind, ViewStyle>>({
   } as unknown as ViewStyle,
 });
 
-/** A style that keeps Viso gently moving, unless reduced motion is on. */
+/** A style that keeps Biso gently moving, unless reduced motion is on. */
 export function useGentleMotion(kind: MotionKind): ViewStyle | undefined {
   const [reduced, setReduced] = useState(false);
 

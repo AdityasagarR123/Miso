@@ -80,7 +80,7 @@ function Stage({ height }: { height: number }) {
       </View>
 
       <View style={styles.video}>
-        <KeyedVideo label="Viso the red panda studying at a desk while a butterfly flies around" />
+        <KeyedVideo label="Biso the red panda studying at a desk while a butterfly flies around" />
       </View>
 
       <Text style={[styles.bubble, styles.bubbleOne, float]}>¡Hola!</Text>
@@ -117,7 +117,7 @@ export function LanguagesSection({
           Ten languages. One path.
         </Text>
         <Text style={styles.subtitle}>
-          Viso does the homework too. Pick a language and join in.
+          Biso does the homework too. Pick a language and join in.
         </Text>
       </View>
 

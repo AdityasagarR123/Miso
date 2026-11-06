@@ -4,9 +4,9 @@ import { Image, Pressable, StyleSheet, Text, View, type ViewStyle } from 'react-
 import { useGentleMotion } from '@/components/gentleMotion';
 import { colors, radius, spacing } from '@/theme';
 
-import { GripPaw, Tail } from './VisoParts';
+import { GripPaw, Tail } from './BisoParts';
 
-const LOGO_HEAD = require('../../../assets/brand/viso-head.png');
+const LOGO_HEAD = require('../../../assets/brand/biso-head.png');
 
 export type CardPose = 'hug' | 'peek-center' | 'peek-left' | 'peek-right';
 
@@ -22,7 +22,7 @@ type GameCardProps = {
 
 const HEAD_WIDTH = 96;
 const HEAD_HEIGHT = 80;
-// How far the card sits below the top, so that Viso's chin hides behind it.
+// How far the card sits below the top, so that Biso's chin hides behind it.
 const CARD_TOP = 52;
 
 // CSS transitions make hovering smooth on the web and do nothing on phones.
@@ -73,7 +73,7 @@ export function GameCard({
         </View>
       ) : null}
 
-      {/* Viso sits behind the card, so the card hides the chin. */}
+      {/* Biso sits behind the card, so the card hides the chin. */}
       <View
         pointerEvents="none"
         style={[
@@ -89,7 +89,7 @@ export function GameCard({
       >
         <View style={[styles.headImage, bob]}>
           <Image
-            accessibilityLabel="Viso peeking over the card"
+            accessibilityLabel="Biso peeking over the card"
             source={LOGO_HEAD}
             resizeMode="contain"
             style={styles.headImage}
@@ -103,7 +103,7 @@ export function GameCard({
         <Text style={styles.text}>{hovered ? hoverLine : text}</Text>
       </View>
 
-      {/* The paws sit in front of the card, so Viso looks like it's holding on. */}
+      {/* The paws sit in front of the card, so Biso looks like it's holding on. */}
       {pose === 'hug' ? (
         <>
           <View pointerEvents="none" style={[styles.paw, styles.hugLeft]}>

@@ -25,6 +25,7 @@ import {
   type Progress,
 } from './progress';
 
+// Kept from the app's old name, so existing learners don't lose their progress.
 const STORAGE_KEY = 'viso.progress';
 
 type ProgressContextValue = {

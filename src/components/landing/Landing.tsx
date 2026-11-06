@@ -38,8 +38,8 @@ import { LanguagesSection } from './LanguagesSection';
 import { TrailMap } from './TrailMap';
 import { TryIt } from './TryIt';
 
-const LOGO_HEAD = require('../../../assets/brand/viso-head.png');
-const LOGO_FULL = require('../../../assets/brand/viso-full.png');
+const LOGO_HEAD = require('../../../assets/brand/biso-head.png');
+const LOGO_FULL = require('../../../assets/brand/biso-full.png');
 
 const ROTATE_MS = 2400;
 const FADE_MS = 220;
@@ -74,7 +74,7 @@ const GAME_FEATURES = [
     color: '#FBE0D3',
     tilt: '-1.5deg',
     pose: 'hug' as CardPose,
-    hoverLine: 'Viso is keeping this one safe for you.',
+    hoverLine: 'Biso is keeping this one safe for you.',
   },
   {
     Icon: XpIcon,
@@ -83,7 +83,7 @@ const GAME_FEATURES = [
     color: '#FCEBB6',
     tilt: '1.2deg',
     pose: 'peek-center' as CardPose,
-    hoverLine: 'Viso is counting your points. Twice.',
+    hoverLine: 'Biso is counting your points. Twice.',
   },
   {
     Icon: StreakIcon,
@@ -92,7 +92,7 @@ const GAME_FEATURES = [
     color: '#FAD9B8',
     tilt: '-1deg',
     pose: 'peek-left' as CardPose,
-    hoverLine: 'Careful, Viso says this is getting hot.',
+    hoverLine: 'Careful, Biso says this is getting hot.',
   },
   {
     Icon: PracticeIcon,
@@ -101,7 +101,7 @@ const GAME_FEATURES = [
     color: '#D2F1EE',
     tilt: '1.5deg',
     pose: 'peek-right' as CardPose,
-    hoverLine: 'Viso never forgets a tricky word.',
+    hoverLine: 'Biso never forgets a tricky word.',
   },
 ];
 
@@ -278,11 +278,11 @@ export function Landing() {
           <View style={styles.heroContent}>
             <View style={styles.headline}>
               <Text accessibilityRole="header" style={headlineStyle}>
-                Viso
+                Biso
               </Text>
               <View style={nod}>
                 <Image
-                  accessibilityLabel="Viso the red panda, nodding along"
+                  accessibilityLabel="Biso the red panda, nodding along"
                   source={LOGO_HEAD}
                   resizeMode="contain"
                   style={{ height: headSize, marginHorizontal: 6, width: headSize }}
@@ -380,7 +380,7 @@ export function Landing() {
             <Image
               source={LOGO_FULL}
               resizeMode="contain"
-              accessibilityLabel="Viso the red panda, waving"
+              accessibilityLabel="Biso the red panda, waving"
               style={styles.finalLogo}
             />
           </View>
@@ -388,7 +388,7 @@ export function Landing() {
             Your first lesson is a few minutes away.
           </Text>
           <Pill label={startLabel} onPress={start} />
-          <Text style={styles.footer}>Viso. Free language learning.</Text>
+          <Text style={styles.footer}>Biso. Free language learning.</Text>
         </View>
       </ScrollView>
 
@@ -401,12 +401,12 @@ export function Landing() {
             style={styles.brand}
           >
             <Image
-              accessibilityLabel="Viso logo"
+              accessibilityLabel="Biso logo"
               source={LOGO_HEAD}
               resizeMode="contain"
               style={styles.brandLogo}
             />
-            <Text style={styles.brandName}>Viso</Text>
+            <Text style={styles.brandName}>Biso</Text>
           </Pressable>
 
           {showNavLinks ? (

@@ -8,7 +8,7 @@ import {
 } from 'react-native';
 
 import { Button } from '@/components/Button';
-import { GripPaw } from '@/components/landing/VisoParts';
+import { GripPaw } from '@/components/landing/BisoParts';
 import { OptionButton, type OptionStatus } from '@/components/OptionButton';
 import { shuffle } from '@/course/shuffle';
 import type { MultipleChoiceExercise } from '@/course/types';
@@ -16,7 +16,7 @@ import { colors, spacing } from '@/theme';
 
 import type { ExerciseProps } from './types';
 
-const LOGO_HEAD = require('../../../assets/brand/viso-head.png');
+const LOGO_HEAD = require('../../../assets/brand/biso-head.png');
 
 export function MultipleChoice({
   exercise,
@@ -61,12 +61,12 @@ export function MultipleChoice({
           pointerEvents="none"
           style={[styles.peek, { right: outside, width: headSize }]}
         >
-          {/* The paw comes first, so its arm tucks in behind Viso's head. */}
+          {/* The paw comes first, so its arm tucks in behind Biso's head. */}
           <View style={styles.peekPaw}>
             <GripPaw size={headSize * 0.36} />
           </View>
           <Image
-            accessibilityLabel="Viso peeking in to watch you answer"
+            accessibilityLabel="Biso peeking in to watch you answer"
             source={LOGO_HEAD}
             resizeMode="contain"
             style={{ height: headSize * 0.84, width: headSize }}

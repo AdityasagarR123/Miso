@@ -1,6 +1,6 @@
 import Svg, { Circle, Ellipse, Path } from 'react-native-svg';
 
-/** Hand-drawn pieces of Viso, matched to the logo, that can overlap a card. */
+/** Hand-drawn pieces of Biso, matched to the logo, that can overlap a card. */
 const FUR = '#3E2116';
 const OUTLINE = '#2A150C';
 const PAD = '#6B4231';
@@ -25,7 +25,7 @@ export function GripPaw({ size = 44 }: { size?: number }) {
   );
 }
 
-/** Viso's striped tail, to peek out from behind a card. */
+/** Biso's striped tail, to peek out from behind a card. */
 export function Tail({ size = 90 }: { size?: number }) {
   return (
     <Svg width={size} height={size} viewBox="0 0 90 90">
@@ -41,7 +41,7 @@ export function Tail({ size = 90 }: { size?: number }) {
   );
 }
 
-/** Two legs hanging down, for when Viso sits on an edge. */
+/** Two legs hanging down, for when Biso sits on an edge. */
 export function DanglingLegs({ width = 90 }: { width?: number }) {
   return (
     <Svg width={width} height={width * 0.62} viewBox="0 0 90 56">

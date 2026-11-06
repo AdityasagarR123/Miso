@@ -24,7 +24,7 @@ import { lessonsOf } from '@/course/levels';
 import { useProgress } from '@/progress/ProgressContext';
 import { colors, radius, spacing } from '@/theme';
 
-const LOGO_HEAD = require('../../assets/brand/viso-head.png');
+const LOGO_HEAD = require('../../assets/brand/biso-head.png');
 const CONTENT_WIDTH = 1040;
 
 // A CSS transition makes hovering smooth on the web and does nothing on phones.
@@ -100,7 +100,7 @@ function LanguageCard({
         <View style={styles.side}>
           <Text style={styles.greeting}>{course.greeting}</Text>
           <View pointerEvents="none" style={styles.mascot}>
-            <KeyedVideo label="Viso the red panda studying at a desk" />
+            <KeyedVideo label="Biso the red panda studying at a desk" />
           </View>
         </View>
       </Pressable>
@@ -152,12 +152,12 @@ export default function LanguagesScreen() {
       <View style={styles.tabs}>
         <Pressable
           accessibilityRole="button"
-          accessibilityLabel="Go to the Viso home page"
+          accessibilityLabel="Go to the Biso home page"
           onPress={() => router.push('/')}
           style={[styles.tab, styles.tabLeft]}
         >
           <Image source={LOGO_HEAD} resizeMode="contain" style={styles.logo} />
-          <Text style={styles.brand}>Viso</Text>
+          <Text style={styles.brand}>Biso</Text>
         </Pressable>
         <View style={[styles.tab, styles.tabRight]}>
           <InstallButton />

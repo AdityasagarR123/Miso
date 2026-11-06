@@ -13,11 +13,11 @@ import { celebrate } from '@/components/Confetti';
 import { useGentleMotion } from '@/components/gentleMotion';
 import { colors, radius, spacing } from '@/theme';
 
-import { DanglingLegs } from './VisoParts';
+import { DanglingLegs } from './BisoParts';
 
-const LOGO_FULL = require('../../../assets/brand/viso-full.png');
+const LOGO_FULL = require('../../../assets/brand/biso-full.png');
 
-// A CSS transition makes Viso's hop smooth on the web.
+// A CSS transition makes Biso's hop smooth on the web.
 const HOP = {
   transitionDuration: '220ms',
   transitionProperty: 'transform',
@@ -40,9 +40,9 @@ export function TryIt() {
   const [cheering, setCheering] = useState(false);
   const sway = useGentleMotion('sway');
   const { width } = useWindowDimensions();
-  const visoWidth = width >= 800 ? 170 : 120;
-  // The art is cropped above Viso's feet, where the drawn legs take over.
-  const visoHeight = visoWidth * (690 / 732) * 0.88;
+  const bisoWidth = width >= 800 ? 170 : 120;
+  // The art is cropped above Biso's feet, where the drawn legs take over.
+  const bisoHeight = bisoWidth * (690 / 732) * 0.88;
 
   useEffect(() => {
     if (!cheering) return;
@@ -53,7 +53,7 @@ export function TryIt() {
   const { language, word } = WORDS[wordIndex];
 
   return (
-    <View style={{ paddingTop: visoHeight - 14 }}>
+    <View style={{ paddingTop: bisoHeight - 14 }}>
     <View style={styles.card}>
       <View style={styles.languages}>
         {WORDS.map((item, index) => (
@@ -117,7 +117,7 @@ export function TryIt() {
           ? `Tap an answer to try a tiny ${language} lesson.`
           : picked === ANSWER
             ? 'Correct! That is your first word.'
-            : 'Not quite. Viso believes in you, so try again.'}
+            : 'Not quite. Biso believes in you, so try again.'}
       </Text>
     </View>
 
@@ -126,21 +126,21 @@ export function TryIt() {
         style={[
           styles.sitting,
           HOP,
-          { transform: [{ translateY: cheering ? -22 : 0 }], width: visoWidth },
+          { transform: [{ translateY: cheering ? -22 : 0 }], width: bisoWidth },
         ]}
       >
         <View style={sway}>
-        <View style={[styles.visoCrop, { height: visoHeight }]}>
+        <View style={[styles.bisoCrop, { height: bisoHeight }]}>
           <Image
-            accessibilityLabel="Viso the red panda, sitting on the card"
+            accessibilityLabel="Biso the red panda, sitting on the card"
             source={LOGO_FULL}
             resizeMode="contain"
-            style={{ height: visoWidth * (690 / 732), width: visoWidth }}
+            style={{ height: bisoWidth * (690 / 732), width: bisoWidth }}
           />
         </View>
         </View>
         <View style={styles.legs}>
-          <DanglingLegs width={visoWidth * 0.42} />
+          <DanglingLegs width={bisoWidth * 0.42} />
         </View>
       </View>
     </View>
@@ -153,7 +153,7 @@ const styles = StyleSheet.create({
     right: '6%',
     top: 0,
   },
-  visoCrop: {
+  bisoCrop: {
     overflow: 'hidden',
   },
   legs: {

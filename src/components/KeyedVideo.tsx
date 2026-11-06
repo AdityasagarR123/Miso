@@ -3,8 +3,8 @@ import { AccessibilityInfo, Image, Platform, StyleSheet, View } from 'react-nati
 
 import { publicUrl } from '@/lib/basePath';
 
-const VIDEO_SRC = publicUrl('/video/viso-moves.mp4');
-const LOGO_FULL = require('../../assets/brand/viso-full.png');
+const VIDEO_SRC = publicUrl('/video/biso-moves.mp4');
+const LOGO_FULL = require('../../assets/brand/biso-full.png');
 
 // Drawn at a modest size, because removing the green touches every pixel.
 const CANVAS_WIDTH = 560;
@@ -20,7 +20,7 @@ function removeGreen(pixels: Uint8ClampedArray) {
     if (excess > 70) {
       pixels[i + 3] = 0;
     } else if (excess > 28) {
-      // Softens the edge, and removes the green glow from Viso's outline.
+      // Softens the edge, and removes the green glow from Biso's outline.
       pixels[i + 3] = (255 * (70 - excess)) / 42;
       pixels[i + 1] = Math.max(red, blue);
     }
@@ -28,7 +28,7 @@ function removeGreen(pixels: Uint8ClampedArray) {
 }
 
 /**
- * Viso's looping animation with the green screen removed, so that Viso stands
+ * Biso's looping animation with the green screen removed, so that Biso stands
  * directly on the page. Only redraws while it's on screen.
  */
 export function KeyedVideo({ label }: { label: string }) {
@@ -52,7 +52,7 @@ export function KeyedVideo({ label }: { label: string }) {
     const draw = () => {
       if (video.readyState < 2) return;
       context.drawImage(video, 0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
-      // The generator's small mark sits in this corner, away from Viso.
+      // The generator's small mark sits in this corner, away from Biso.
       context.clearRect(
         CANVAS_WIDTH * 0.84,
         CANVAS_HEIGHT * 0.76,

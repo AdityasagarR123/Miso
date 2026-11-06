@@ -207,7 +207,7 @@ export function levelStatus(
     : 'locked';
 }
 
-/** Where Viso stands: the first open stop, or the last finished one. */
+/** Where Biso stands: the first open stop, or the last finished one. */
 export function currentStopIndex(statuses: string[]): number {
   const open = statuses.indexOf('open');
   if (open >= 0) return open;

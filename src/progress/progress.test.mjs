@@ -153,7 +153,7 @@ test('level status follows its lessons', () => {
   assert.equal(levelStatus(second, lessons, ['a', 'b']), 'open');
 });
 
-test('Viso stands at the first open stop, or the last finished one', () => {
+test('Biso stands at the first open stop, or the last finished one', () => {
   assert.equal(currentStopIndex(['open', 'soon', 'soon']), 0);
   assert.equal(currentStopIndex(['done', 'done', 'open', 'locked']), 2);
   assert.equal(currentStopIndex(['done', 'done', 'soon']), 1);

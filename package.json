@@ -1,5 +1,5 @@
 {
-  "name": "viso",
+  "name": "biso",
   "version": "1.0.0",
   "main": "expo-router/entry",
   "dependencies": {
@@ -9,6 +9,7 @@
     "expo-linking": "~58.0.16",
     "expo-router": "~58.0.30",
     "expo-status-bar": "~58.0.4",
+    "firebase": "^13.2.0",
     "react": "19.3.0",
     "react-dom": "19.3.0",
     "react-native": "0.88.1",
@@ -27,7 +28,11 @@
     "ios": "expo start --ios",
     "web": "expo start --web",
     "typecheck": "tsc --noEmit",
-    "test": "node --test src/progress/progress.test.mjs src/course/spanish.test.mjs src/course/buildCourse.test.mjs src/components/map/roadLayout.test.mjs"
+    "test": "node --test src/progress/progress.test.mjs src/course/spanish.test.mjs src/course/buildCourse.test.mjs src/auth/authHelpers.test.mjs src/components/map/roadLayout.test.mjs",
+    "build:web": "node scripts/check-firebase-env.mjs && npm test && npm run -s typecheck && expo export --platform web --output-dir dist"
   },
-  "private": true
+  "private": true,
+  "engines": {
+    "node": "24.x"
+  }
 }

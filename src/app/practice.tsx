@@ -2,6 +2,7 @@ import { Redirect, useRouter } from 'expo-router';
 import { useState } from 'react';
 import { StyleSheet, Text } from 'react-native';
 
+import { useAuth } from '@/auth/AuthContext';
 import { Button } from '@/components/Button';
 import { ExerciseView } from '@/components/exercises/ExerciseView';
 import { FeedbackPanel } from '@/components/exercises/FeedbackPanel';
@@ -18,7 +19,15 @@ const PRACTICE_LENGTH = 5;
 
 export default function PracticeScreen() {
   const { course } = useProgress();
+  const { user, loading } = useAuth();
+
   if (!course) return <Redirect href="/languages" />;
+  if (loading) return <Screen>{null}</Screen>;
+  if (!user) {
+    return (
+      <Redirect href={{ pathname: '/sign-in', params: { next: '/practice' } }} />
+    );
+  }
   return <PracticeSession />;
 }
 

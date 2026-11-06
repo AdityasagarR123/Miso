@@ -1,62 +1,32 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 
-import { useInstall } from '@/lib/install';
 import { colors, radius, spacing } from '@/theme';
 
-type InstallButtonProps = {
-  /** Where the help panel opens, relative to the button. */
-  helpPosition?: 'below-right' | 'below-center';
-};
+const MESSAGE_MS = 2500;
 
-export function InstallButton({
-  helpPosition = 'below-right',
-}: InstallButtonProps) {
-  const { canPrompt, isInstalled, prompt } = useInstall();
-  const [showHelp, setShowHelp] = useState(false);
+export function InstallButton() {
+  const [showMessage, setShowMessage] = useState(false);
 
-  if (isInstalled) return null;
+  useEffect(() => {
+    if (!showMessage) return;
+    const timer = setTimeout(() => setShowMessage(false), MESSAGE_MS);
+    return () => clearTimeout(timer);
+  }, [showMessage]);
 
   return (
     <View style={styles.wrapper}>
       <Pressable
         accessibilityRole="button"
-        accessibilityLabel="Install Viso on this device"
-        accessibilityState={{ expanded: showHelp }}
-        onPress={() => {
-          if (canPrompt) {
-            setShowHelp(false);
-            prompt();
-          } else {
-            setShowHelp(!showHelp);
-          }
-        }}
+        onPress={() => setShowMessage(true)}
         style={({ pressed }) => [styles.button, pressed && styles.pressed]}
       >
-        <Text style={styles.icon}>↓</Text>
         <Text style={styles.label}>Install app</Text>
       </Pressable>
 
-      {showHelp ? (
-        <View
-          accessibilityLiveRegion="polite"
-          style={[
-            styles.help,
-            helpPosition === 'below-right' ? styles.helpRight : styles.helpCenter,
-          ]}
-        >
-          <Text style={styles.helpTitle}>Add Viso to your device</Text>
-          <Text style={styles.helpText}>
-            Chrome or Edge on a computer: use the install icon in the address
-            bar, or find "Install Viso" in the browser menu.
-          </Text>
-          <Text style={styles.helpText}>
-            Safari on a Mac: choose File, then Add to Dock.
-          </Text>
-          <Text style={styles.helpText}>
-            iPhone or Android: open the browser's share or menu button, then
-            choose Add to Home Screen.
-          </Text>
+      {showMessage ? (
+        <View accessibilityLiveRegion="polite" style={styles.message}>
+          <Text style={styles.messageText}>Coming soon</Text>
         </View>
       ) : null}
     </View>
@@ -71,49 +41,34 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: colors.sand,
     borderRadius: radius.pill,
-    flexDirection: 'row',
-    gap: spacing.xs,
+    justifyContent: 'center',
     minHeight: 44,
     paddingHorizontal: spacing.md,
   },
   pressed: {
     opacity: 0.8,
   },
-  icon: {
-    color: colors.ink,
-    fontSize: 18,
-    fontWeight: '800',
-  },
   label: {
     color: colors.ink,
     fontSize: 15,
     fontWeight: '700',
   },
-  help: {
+  message: {
     backgroundColor: colors.inkRaised,
     borderColor: colors.inkBorder,
     borderRadius: radius.md,
     borderWidth: 1,
-    gap: spacing.sm,
-    padding: spacing.md,
+    paddingHorizontal: spacing.md,
+    paddingVertical: spacing.sm,
     position: 'absolute',
-    top: 52,
-    width: 290,
-  },
-  helpRight: {
     right: 0,
+    top: 52,
+    width: 130,
   },
-  helpCenter: {
-    alignSelf: 'center',
-  },
-  helpTitle: {
+  messageText: {
     color: colors.sand,
-    fontSize: 16,
-    fontWeight: '800',
-  },
-  helpText: {
-    color: colors.sandMuted,
-    fontSize: 14,
-    lineHeight: 20,
+    fontSize: 15,
+    fontWeight: '700',
+    textAlign: 'center',
   },
 });

@@ -24,7 +24,7 @@ import {
   type MapLayout,
 } from './roadLayout';
 
-const LOGO_FULL = require('../../../assets/brand/viso-full.png');
+const LOGO_FULL = require('../../../assets/brand/biso-full.png');
 const FONT = 'system-ui, -apple-system, "Segoe UI", sans-serif';
 
 export type StopStatus = 'done' | 'open' | 'locked';
@@ -164,7 +164,7 @@ function Stop({
 type RoadMapProps = {
   theme: MapTheme;
   stops: RoadStop[];
-  /** Which stop Viso stands at. */
+  /** Which stop Biso stands at. */
   markerIndex: number;
   /** Screen height used by everything else on the page. */
   reservedHeight: number;
@@ -325,7 +325,7 @@ export function RoadMap({
         >
           <View style={[styles.mascotImage, bob]}>
             <Image
-              accessibilityLabel="Viso the red panda, standing at your place on the road"
+              accessibilityLabel="Biso the red panda, standing at your place on the road"
               source={LOGO_FULL}
               resizeMode="contain"
               style={styles.mascotImage}

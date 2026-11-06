@@ -9,6 +9,7 @@ import {
   View,
 } from 'react-native';
 
+import { useAuth } from '@/auth/AuthContext';
 import { Button } from '@/components/Button';
 import { themeForCourse } from '@/components/map/mapThemes';
 import { RoadMap, type RoadStop } from '@/components/map/RoadMap';
@@ -18,7 +19,7 @@ import { currentStopIndex, levelStatus } from '@/progress/progress';
 import { useProgress } from '@/progress/ProgressContext';
 import { colors, radius, spacing } from '@/theme';
 
-const LOGO_HEAD = require('../../assets/brand/viso-head.png');
+const LOGO_HEAD = require('../../assets/brand/biso-head.png');
 
 const STATUS_TEXT = {
   done: 'Completed',
@@ -30,6 +31,7 @@ const STATUS_TEXT = {
 export default function LearnScreen() {
   const router = useRouter();
   const { course, lessons, current } = useProgress();
+  const { user, signOut } = useAuth();
   const { width, height } = useWindowDimensions();
 
   if (!course) return <Redirect href="/languages" />;
@@ -72,7 +74,7 @@ export default function LearnScreen() {
       <View style={styles.bar}>
         <Pressable
           accessibilityRole="button"
-          accessibilityLabel="Go to the Viso home page"
+          accessibilityLabel="Go to the Biso home page"
           onPress={() => router.push('/')}
           style={styles.brand}
         >
@@ -98,6 +100,15 @@ export default function LearnScreen() {
             variant="secondary"
             onPress={() => router.push('/languages')}
           />
+          <Button
+            label={user ? 'Sign out' : 'Sign in'}
+            variant="secondary"
+            onPress={() =>
+              user
+                ? signOut()
+                : router.push({ pathname: '/sign-in', params: { next: '/learn' } })
+            }
+          />
         </View>
 
         {isWide ? null : (
@@ -111,7 +122,7 @@ export default function LearnScreen() {
         theme={theme}
         stops={stops}
         markerIndex={currentStopIndex(statuses)}
-        reservedHeight={isWide ? 104 : 196}
+        reservedHeight={isWide ? 104 : 256}
       />
     </ScrollView>
   );

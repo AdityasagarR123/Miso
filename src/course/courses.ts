@@ -26,7 +26,7 @@ const spanish: Course = {
   ],
 };
 
-/** The ten languages Viso teaches. */
+/** The ten languages Biso teaches. */
 export const COURSES: Course[] = [
   spanish,
   language('fr', 'French', 'Bonjour !'),

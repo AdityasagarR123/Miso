@@ -1,14 +1,14 @@
-# Viso
+# Biso
 
 **Learn a language in a few minutes a day, completely free.**
 
-Viso is a playful language-learning website, with phone apps to follow, guided by a cheeky red panda mascot. Lessons are short, progress feels like a game, and every part of learning is free.
+Biso is a playful language-learning website, with phone apps to follow, guided by a cheeky red panda mascot. Lessons are short, progress feels like a game, and every part of learning is free.
 
 > **Status:** Early development. All 10 languages and their 10 levels are playable, with XP, hearts, streaks and saved progress. The courses are first drafts that still need review by fluent speakers.
 
 ## Languages and levels
 
-Viso will teach ten languages, each taught from English:
+Biso will teach ten languages, each taught from English:
 
 - Spanish
 - French
@@ -38,7 +38,7 @@ Every language follows the same 10 levels, set across five map regions:
 
 ## Completely free
 
-Viso is going to be **completely free**:
+Biso is going to be **completely free**:
 
 - No subscriptions
 - No premium tier
@@ -52,7 +52,7 @@ Viso is going to be **completely free**:
 - **Hearts:** mistakes cost a heart, and practice earns them back
 - **XP and streaks:** daily goals that make it easy to keep coming back
 - **Smart review:** the things you get wrong come back until they stick
-- **Viso the red panda:** a mascot who cheers, sulks and celebrates along with you
+- **Biso the red panda:** a mascot who cheers, sulks and celebrates along with you
 
 ## Planned tech stack
 
@@ -67,7 +67,7 @@ These choices may change as the project grows.
 
 ## Try it
 
-Viso is live at **https://adityasagarr123.github.io/Viso/**. It publishes automatically whenever `main` changes.
+Biso is live at **https://thebiso.xyz**. It is hosted on Vercel and publishes automatically whenever `main` changes.
 
 ## Getting started
 
@@ -78,7 +78,9 @@ npm install
 npm run web
 ```
 
-This starts Viso and lets you open it in your browser. The landing page is at `/` and the lessons are at `/learn`. The web version comes first, so that's the main way to run it for now.
+To play lessons locally, copy `.env.example` to `.env.local` and add your Firebase project's details.
+
+This starts Biso and lets you open it in your browser. The landing page is at `/` and the lessons are at `/learn`. The web version comes first, so that's the main way to run it for now.
 
 ## Roadmap
 
@@ -103,10 +105,10 @@ This starts Viso and lets you open it in your browser. The landing page is at `/
 - [x] Add review of past mistakes
 - [ ] Add sound effects
 
-### Phase 4: Bringing Viso to life
-- [ ] Animate Viso in Rive: idle, correct, wrong, streak warning and celebration
+### Phase 4: Bringing Biso to life
+- [ ] Animate Biso in Rive: idle, correct, wrong, streak warning and celebration
 - [ ] Trigger reactions from what happens in a lesson
-- [x] Move Viso along the lesson path
+- [x] Move Biso along the lesson path
 
 ### Courses
 - [x] Add the language picker and 10-level structure
@@ -117,16 +119,16 @@ This starts Viso and lets you open it in your browser. The landing page is at `/
 - [ ] Have fluent speakers review every course
 
 ### Phase 5: Accounts and sync
-- [ ] Add sign-up and login
+- [x] Add sign-up and login with Firebase
 - [ ] Sync progress across devices
 - [ ] Add a learner profile with stats
 
 ### Phase 6: Web launch
 - [x] Add the landing page
-- [x] Make the website installable on desktop and phones
+- [ ] Make the website installable on desktop and phones
 - [ ] Test with a small group of learners and fix what they find
 - [ ] Add audio pronunciation for lessons
-- [x] Publish the Viso website
+- [x] Publish the Biso website
 
 ### Phase 7: Phone apps
 - [ ] Test and adapt the app on Android and iOS
