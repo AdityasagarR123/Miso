@@ -9,6 +9,9 @@ import { LEVEL_PLAN } from '../src/course/levels.ts';
 import { PHRASEBOOK } from '../src/course/phrasebook.ts';
 import {
   ABOUT_META,
+  CAREER_ROLES,
+  CAREERS_COMPENSATION,
+  CAREERS_META,
   CONTACT_META,
   HOME_META,
   LANGUAGE_PAGES,
@@ -41,6 +44,9 @@ const pages = buildPublicPages({
   languagesIndex: LANGUAGES_META,
   about: ABOUT_META,
   contact: CONTACT_META,
+  careers: CAREERS_META,
+  roles: CAREER_ROLES,
+  compensation: CAREERS_COMPENSATION,
   legal: Object.values(LEGAL_PAGES),
   languages: LANGUAGE_PAGES,
   languageMeta,

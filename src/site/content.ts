@@ -36,6 +36,58 @@ export const CONTACT_META = {
     'Questions about Biso, a mistake in a lesson, or a request about your data? Email the Biso team and we will get back to you.',
 };
 
+export const CAREERS_META = {
+  path: '/careers',
+  title: 'Careers at Biso: ML Engineer and UI/UX Designer Roles',
+  description:
+    'Help build Biso, the free language-learning website. We are hiring an ML Engineer and a UI/UX Designer. See what you would work on and how to apply.',
+};
+
+export const CAREERS_COMPENSATION =
+  'Salary and compensation will be discussed during the hiring process.';
+
+export type CareerRole = {
+  title: string;
+  summary: string;
+  work: string[];
+  looking: string[];
+};
+
+export const CAREER_ROLES: CareerRole[] = [
+  {
+    title: 'ML Engineer',
+    summary: "Help give Biso's characters a voice, and help make lessons smarter.",
+    work: [
+      'Test open voice models across our 10 languages.',
+      'Build the pipeline that turns lesson scripts into audio.',
+      'Explore how review can adapt to each learner.',
+    ],
+    looking: [
+      'Hands-on experience with Python and machine learning models.',
+      'Experience with speech or language models is a big plus.',
+      'Care about quality, especially in languages you do not speak yourself.',
+    ],
+  },
+  {
+    title: 'UI/UX Designer',
+    summary: 'Help make learning a language feel like something people want to come back to.',
+    work: [
+      'Design character-led lesson scenes.',
+      'Improve the map, lesson and practice experiences.',
+      'Test designs with real learners on phones and desktops.',
+    ],
+    looking: [
+      'A portfolio that shows how you think, as well as the final screens.',
+      'Experience designing for phones first.',
+      'A love of playful, friendly products.',
+    ],
+  },
+];
+
+export function roleApplyLink(role: CareerRole): string {
+  return `mailto:${SITE.contactEmail}?subject=${encodeURIComponent(`Application: ${role.title}`)}`;
+}
+
 export type LegalSection = {
   heading: string;
   paragraphs?: string[];

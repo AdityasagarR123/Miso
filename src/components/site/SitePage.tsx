@@ -53,6 +53,7 @@ const FOOTER_LINKS: [string, string][] = [
   ['/languages', 'Languages'],
   ['/about', 'About'],
   ['/contact', 'Contact'],
+  ['/careers', 'Careers'],
   ...Object.values(LEGAL_PAGES).map(
     (page): [string, string] => [page.path, page.name],
   ),

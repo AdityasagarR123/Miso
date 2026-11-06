@@ -5,6 +5,9 @@ import { LEVEL_PLAN } from '../course/levels.ts';
 import { PHRASEBOOK } from '../course/phrasebook.ts';
 import {
   ABOUT_META,
+  CAREER_ROLES,
+  CAREERS_COMPENSATION,
+  CAREERS_META,
   CONTACT_META,
   HOME_META,
   LANGUAGE_PAGES,
@@ -12,6 +15,7 @@ import {
   languageFaq,
   languageMeta,
   LEGAL_PAGES,
+  roleApplyLink,
   SITE,
 } from './content.ts';
 import {
@@ -27,6 +31,9 @@ const content = {
   languagesIndex: LANGUAGES_META,
   about: ABOUT_META,
   contact: CONTACT_META,
+  careers: CAREERS_META,
+  roles: CAREER_ROLES,
+  compensation: CAREERS_COMPENSATION,
   legal: Object.values(LEGAL_PAGES),
   languages: LANGUAGE_PAGES,
   languageMeta,
@@ -39,7 +46,7 @@ const template =
   '<!DOCTYPE html><html lang="en"><head><title>Biso</title></head><body><div id="root"></div></body></html>';
 
 test('every public page has a unique address, title and description', () => {
-  assert.equal(pages.length, 17);
+  assert.equal(pages.length, 18);
   for (const field of ['path', 'title', 'description']) {
     const values = pages.map((page) => page[field]);
     assert.equal(new Set(values).size, pages.length, `repeated ${field}`);
@@ -78,6 +85,17 @@ test('rendered pages carry their own metadata and readable content', () => {
   for (const [, json] of html.matchAll(/ld\+json">(.*?)<\/script>/g)) {
     assert.equal(JSON.parse(json)['@context'], 'https://schema.org');
   }
+});
+
+test('the careers page lists every role', () => {
+  const page = pages.find((item) => item.path === '/careers');
+  assert.match(page.body, /ML Engineer/);
+  assert.ok(page.body.includes('UI/UX Designer'));
+  assert.equal(page.body.split(CAREERS_COMPENSATION).length - 1, CAREER_ROLES.length);
+  assert.equal(
+    roleApplyLink(CAREER_ROLES[1]),
+    'mailto:adityagreatmusician@gmail.com?subject=Application%3A%20UI%2FUX%20Designer',
+  );
 });
 
 test('text with special characters cannot break the HTML', () => {

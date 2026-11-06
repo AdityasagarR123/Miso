@@ -1,6 +1,6 @@
 import type { Level } from '../course/levels';
 import type { Phrase, Scripted } from '../course/phrasebook';
-import type { LanguagePage, LegalPage } from './content';
+import type { CareerRole, LanguagePage, LegalPage } from './content';
 
 /** Everything about the site's words that the build needs, passed in by the script. */
 export type SiteContent = {
@@ -9,6 +9,9 @@ export type SiteContent = {
   languagesIndex: PageMeta;
   about: PageMeta;
   contact: PageMeta;
+  careers: PageMeta;
+  roles: CareerRole[];
+  compensation: string;
   legal: LegalPage[];
   languages: LanguagePage[];
   languageMeta: (page: LanguagePage) => PageMeta;
@@ -56,6 +59,7 @@ function footer(content: SiteContent): string {
     ...content.languages.map((page) => [`/languages/${page.slug}`, `Learn ${page.name}`]),
     ['/about', 'About'],
     ['/contact', 'Contact'],
+    ['/careers', 'Careers'],
     ...content.legal.map((page) => [page.path, page.name]),
   ];
   return `<nav aria-label="Site links">${list(
@@ -248,6 +252,16 @@ export function buildPublicPages(content: SiteContent): BuiltPage[] {
       ...content.contact,
       jsonLd: [],
       body: `<h1>Contact Biso</h1><p>Email <a href="mailto:${content.site.contactEmail}">${content.site.contactEmail}</a>.</p>${footer(content)}`,
+    },
+    {
+      ...content.careers,
+      jsonLd: [],
+      body: `<h1>Careers at Biso</h1>${content.roles
+        .map(
+          (role) =>
+            `<h2>${escapeHtml(role.title)}</h2><p>${escapeHtml(role.summary)}</p><h3>What you'll work on</h3>${list(role.work.map(escapeHtml))}<h3>What we're looking for</h3>${list(role.looking.map(escapeHtml))}<h3>Compensation</h3><p>${escapeHtml(content.compensation)}</p>`,
+        )
+        .join('')}<p>To apply, email <a href="mailto:${content.site.contactEmail}">${content.site.contactEmail}</a>.</p>${footer(content)}`,
     },
     ...content.legal.map((page) => legalPage(content, page)),
   ];

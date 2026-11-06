@@ -4,7 +4,7 @@
   "buildCommand": "npm run build:web",
   "outputDirectory": "dist",
   "rewrites": [
-    { "source": "/:page(languages|about|contact|privacy|terms|cookies)", "destination": "/:page/index.html" },
+    { "source": "/:page(languages|about|contact|careers|privacy|terms|cookies)", "destination": "/:page/index.html" },
     { "source": "/languages/:slug", "destination": "/languages/:slug/index.html" },
     { "source": "/:page(learn|practice|sign-in|account)", "destination": "/app.html" },
     { "source": "/level/:id", "destination": "/app.html" },
