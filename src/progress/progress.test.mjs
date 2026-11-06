@@ -22,7 +22,7 @@ import {
 const ES = 'es-from-en';
 const FR = 'fr-from-en';
 
-const exercise = (id) => ({ id });
+const exercise = (id) => ({ id, prompt: id });
 const lessons = [
   { id: 'a', exercises: [exercise('a1'), exercise('a2')] },
   { id: 'b', exercises: [exercise('b1'), exercise('b2')] },
@@ -130,6 +130,38 @@ test('the shown streak survives until a whole day is missed', () => {
 
 test('dayKey uses the local date with padding', () => {
   assert.equal(dayKey(new Date(2026, 0, 3, 23, 59)), '2026-01-03');
+});
+
+test('finished lessons stay open when new lessons are added before them', () => {
+  const lessons = [{ id: 'a' }, { id: 'new' }, { id: 'b' }, { id: 'c' }];
+  assert.equal(isLessonUnlocked(lessons, ['a', 'b'], 'b'), true);
+  assert.equal(isLessonUnlocked(lessons, ['a', 'b'], 'new'), true);
+  assert.equal(isLessonUnlocked(lessons, ['a', 'b'], 'c'), true);
+  assert.equal(levelStatus([lessons[2]], lessons, ['a']), 'locked');
+});
+
+test('practice can focus on one kind of lesson, without repeats', () => {
+  const question = { type: 'multiple_choice', prompt: 'q', choices: [], answer: '' };
+  const lessons = [
+    { id: 'w1', exercises: [{ id: 'w1-1', type: 'write', prompt: 'w', text: 'x', answers: ['x'] }] },
+    { id: 'g1', kind: 'grammar', exercises: [{ ...question, id: 'g1-1' }] },
+    { id: 'g2', kind: 'grammar', exercises: [{ ...question, id: 'g2-1' }, { ...question, id: 'g2-2', prompt: 'r' }] },
+    { id: 'old-mistake', kind: 'writing', exercises: [{ id: 'm', type: 'write', prompt: 'w', text: 'y', answers: ['y'] }] },
+  ];
+  const fresh = { completedLessons: [], mistakes: [] };
+  const ids = (kind, current = fresh) =>
+    buildPracticeSet(lessons, current, 5, undefined, kind).map((e) => e.id);
+
+  // A new learner can still practice the first grammar lesson.
+  assert.deepEqual(ids('grammar'), ['g1-1']);
+  assert.deepEqual(ids('writing'), ['m']);
+  // The review copy of a question only appears once.
+  assert.deepEqual(
+    ids('grammar', { completedLessons: ['w1', 'g1'], mistakes: [] }),
+    ['g1-1', 'g2-2'],
+  );
+  // Mistakes of another kind stay out of a focused session.
+  assert.deepEqual(ids('grammar', { completedLessons: [], mistakes: ['m'] }), ['g1-1']);
 });
 
 test('lessons unlock one at a time', () => {

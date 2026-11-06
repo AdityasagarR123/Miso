@@ -1,4 +1,4 @@
-import type { Exercise, Lesson } from '../course/types';
+import type { Exercise, Lesson, LessonKind } from '../course/types';
 
 export const MAX_HEARTS = 5;
 export const XP_PER_CORRECT = 2;
@@ -178,7 +178,10 @@ export function completePractice(progress: Progress, today: string): Progress {
   return markActive(progress, today);
 }
 
-/** A lesson opens once the one before it, in course order, is complete. */
+/**
+ * A lesson opens once the one before it, in course order, is complete. Finished
+ * lessons stay open, even if new lessons have since been added before them.
+ */
 export function isLessonUnlocked(
   lessons: Lesson[],
   completedLessons: string[],
@@ -186,7 +189,7 @@ export function isLessonUnlocked(
 ): boolean {
   const index = lessons.findIndex((lesson) => lesson.id === lessonId);
   if (index < 0) return false;
-  if (index === 0) return true;
+  if (index === 0 || completedLessons.includes(lessonId)) return true;
   return completedLessons.includes(lessons[index - 1].id);
 }
 
@@ -215,27 +218,48 @@ export function currentStopIndex(statuses: string[]): number {
   return lastDone >= 0 ? lastDone : 0;
 }
 
-/** Past mistakes come first, then other exercises from unlocked lessons. */
+/** Review lessons repeat questions, so the same one can appear under two ids. */
+function withoutRepeats(exercises: Exercise[]): Exercise[] {
+  const seen = new Set<string>();
+  return exercises.filter(({ id: _id, ...content }) => {
+    const key = JSON.stringify(content);
+    if (seen.has(key)) return false;
+    seen.add(key);
+    return true;
+  });
+}
+
+/**
+ * Past mistakes come first, then other exercises from unlocked lessons. A kind
+ * narrows the set to grammar or writing, and always offers that kind's first
+ * lesson, so a new learner can still practice it.
+ */
 export function buildPracticeSet(
   lessons: Lesson[],
   current: CourseProgress,
   limit: number,
   order: (exercises: Exercise[]) => Exercise[] = (exercises) => exercises,
+  kind?: LessonKind,
 ): Exercise[] {
-  const available = lessons
-    .filter((lesson) =>
-      isLessonUnlocked(lessons, current.completedLessons, lesson.id),
+  const pool = kind
+    ? lessons.filter((lesson) => (lesson.kind ?? 'words') === kind)
+    : lessons;
+  const available = pool
+    .filter(
+      (lesson, index) =>
+        (kind !== undefined && index === 0) ||
+        isLessonUnlocked(lessons, current.completedLessons, lesson.id),
     )
     .flatMap((lesson) => lesson.exercises);
   const isMistake = (exercise: Exercise) =>
     current.mistakes.includes(exercise.id);
 
-  const everyMistake = lessons
+  const everyMistake = pool
     .flatMap((lesson) => lesson.exercises)
     .filter(isMistake);
   const others = available.filter((exercise) => !isMistake(exercise));
 
-  return [...order(everyMistake), ...order(others)].slice(0, limit);
+  return withoutRepeats([...order(everyMistake), ...order(others)]).slice(0, limit);
 }
 
 function parseIds(value: unknown): string[] {

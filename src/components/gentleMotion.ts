@@ -6,7 +6,7 @@ import {
   type ViewStyle,
 } from 'react-native';
 
-type MotionKind = 'nod' | 'bob' | 'sway' | 'float';
+type MotionKind = 'nod' | 'bob' | 'sway' | 'float' | 'cheer';
 
 // CSS keyframes keep Biso moving without using animation frames, so this stays
 // light and never competes with a hover effect on a parent element. The web
@@ -29,6 +29,16 @@ const MOTIONS = StyleSheet.create<Record<MotionKind, ViewStyle>>({
     animationKeyframes: {
       from: { transform: 'translateY(0px)' },
       to: { transform: 'translateY(-7px)' },
+    },
+    animationTimingFunction: 'ease-in-out',
+  } as unknown as ViewStyle,
+  cheer: {
+    animationDirection: 'alternate',
+    animationDuration: '0.5s',
+    animationIterationCount: 'infinite',
+    animationKeyframes: {
+      from: { transform: 'translateY(0px) rotate(-7deg) scale(1)' },
+      to: { transform: 'translateY(-14px) rotate(7deg) scale(1.06)' },
     },
     animationTimingFunction: 'ease-in-out',
   } as unknown as ViewStyle,

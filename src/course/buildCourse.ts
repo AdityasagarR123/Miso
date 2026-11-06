@@ -1,3 +1,4 @@
+import type { GrammarQuestion } from './grammar';
 import type { Level } from './levels';
 import type { Phrase, Scripted } from './phrasebook';
 import type { Exercise, Lesson, Unit } from './types';
@@ -6,6 +7,9 @@ export type LanguageKey = Exclude<keyof Phrase, 'en'>;
 
 const PHRASES_PER_LEVEL = 8;
 const PHRASES_PER_LESSON = 4;
+const GRAMMAR_PER_LEVEL = 2;
+const GRAMMAR_PER_LESSON = 5;
+const WRITING_PER_LESSON = 6;
 
 type Item = { english: string; target: string };
 
@@ -83,18 +87,87 @@ function buildExercises(
   ];
 }
 
-/** Builds every level of a language from the shared phrasebook. */
+/** This level's questions come first, then a review of the ones just before. */
+function buildGrammarLesson(
+  id: string,
+  levelIndex: number,
+  grammar: readonly GrammarQuestion[],
+): Lesson {
+  const end = (levelIndex + 1) * GRAMMAR_PER_LEVEL;
+  const newStart = end - GRAMMAR_PER_LEVEL;
+  const reviewStart = Math.max(0, end - GRAMMAR_PER_LESSON);
+  const questions = [
+    ...grammar.slice(newStart, end),
+    ...grammar.slice(reviewStart, newStart).reverse(),
+  ];
+
+  return {
+    id,
+    title: 'Grammar',
+    kind: 'grammar',
+    exercises: questions.map(([prompt, answer, ...wrong], index) => ({
+      id: `${id}-${index + 1}`,
+      type: 'multiple_choice',
+      prompt,
+      choices: [answer, ...wrong],
+      answer,
+    })),
+  };
+}
+
+/** The learner types the level's shortest phrases, which are fairest to write. */
+function buildWritingLesson(
+  id: string,
+  phrases: readonly Phrase[],
+  language: LanguageKey,
+  languageTitle: string,
+): Lesson {
+  const chosen = new Set(
+    [...phrases]
+      .sort((a, b) => answersOf(a, language)[0].length - answersOf(b, language)[0].length)
+      .slice(0, WRITING_PER_LESSON),
+  );
+
+  return {
+    id,
+    title: 'Writing',
+    kind: 'writing',
+    exercises: phrases
+      .filter((phrase) => chosen.has(phrase))
+      .map((phrase, index) => {
+        const answers = answersOf(phrase, language);
+        return {
+          id: `${id}-${index + 1}`,
+          type: 'write',
+          prompt: `Write this in ${languageTitle}`,
+          text: phrase.en,
+          answers,
+          hint:
+            answers.length > 1
+              ? 'The native script or Latin letters both work.'
+              : 'Accents and capital letters are optional.',
+        };
+      }),
+  };
+}
+
+function answersOf(phrase: Phrase, language: LanguageKey): string[] {
+  const value = phrase[language];
+  return typeof value === 'string' ? [value] : [...(value as Scripted)];
+}
+
+/** Builds every level of a language from the shared phrasebook and grammar. */
 export function buildUnits(
   levels: readonly Level[],
   phrases: readonly Phrase[],
   language: LanguageKey,
   languageTitle: string,
+  grammar: readonly GrammarQuestion[],
 ): Unit[] {
   return levels.map((level, levelIndex) => {
     const start = levelIndex * PHRASES_PER_LEVEL;
-    const items = phrases
-      .slice(start, start + PHRASES_PER_LEVEL)
-      .map((phrase) => toItem(phrase, language));
+    const levelPhrases = phrases.slice(start, start + PHRASES_PER_LEVEL);
+    const items = levelPhrases.map((phrase) => toItem(phrase, language));
 
     const lessons: Lesson[] = [0, 1].map((part) => {
       const id = `${language}-${level.id}-${part + 1}`;
@@ -104,10 +177,17 @@ export function buildUnits(
       );
       return {
         id,
-        title: `${level.title} ${part + 1}`,
+        title: `Words ${part + 1}`,
+        kind: 'words',
         exercises: buildExercises(id, languageTitle, lessonItems, items),
       };
     });
+
+    const baseId = `${language}-${level.id}`;
+    lessons.push(
+      buildGrammarLesson(`${baseId}-grammar`, levelIndex, grammar),
+      buildWritingLesson(`${baseId}-writing`, levelPhrases, language, languageTitle),
+    );
 
     return { id: level.id, title: level.title, lessons };
   });

@@ -24,8 +24,13 @@ type Mode = 'sign-in' | 'sign-up';
 export default function SignInScreen() {
   const { user, loading, signIn, signUp, signInWithGoogle, resetPassword } =
     useAuth();
-  const { next } = useLocalSearchParams<{ next?: string }>();
-  const [mode, setMode] = useState<Mode>('sign-up');
+  const { next, mode: startMode } = useLocalSearchParams<{
+    next?: string;
+    mode?: string;
+  }>();
+  const [mode, setMode] = useState<Mode>(
+    startMode === 'sign-in' ? 'sign-in' : 'sign-up',
+  );
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState<string | null>(null);

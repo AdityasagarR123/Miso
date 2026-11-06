@@ -5,7 +5,7 @@ import { colors, radius, spacing } from '@/theme';
 
 const MESSAGE_MS = 2500;
 
-export function InstallButton() {
+export function InstallButton({ short = false }: { short?: boolean }) {
   const [showMessage, setShowMessage] = useState(false);
 
   useEffect(() => {
@@ -21,12 +21,15 @@ export function InstallButton() {
         onPress={() => setShowMessage(true)}
         style={({ pressed }) => [styles.button, pressed && styles.pressed]}
       >
-        <Text style={styles.label}>Install app</Text>
+        <Text style={styles.label}>{short ? 'Install' : 'Install app'}</Text>
       </Pressable>
 
       {showMessage ? (
         <View accessibilityLiveRegion="polite" style={styles.message}>
-          <Text style={styles.messageText}>Coming soon</Text>
+          <Text style={styles.messageTitle}>Coming soon!</Text>
+          <Text style={styles.messageText}>
+            The Biso app is on its way. For now, learn right here.
+          </Text>
         </View>
       ) : null}
     </View>
@@ -39,36 +42,42 @@ const styles = StyleSheet.create({
   },
   button: {
     alignItems: 'center',
-    backgroundColor: colors.sand,
+    backgroundColor: colors.rustLight,
     borderRadius: radius.pill,
     justifyContent: 'center',
     minHeight: 44,
-    paddingHorizontal: spacing.md,
+    paddingHorizontal: 14,
   },
   pressed: {
     opacity: 0.8,
   },
   label: {
-    color: colors.ink,
+    color: colors.rustDark,
     fontSize: 15,
-    fontWeight: '700',
+    fontWeight: '800',
   },
   message: {
-    backgroundColor: colors.inkRaised,
-    borderColor: colors.inkBorder,
+    backgroundColor: colors.white,
+    borderColor: colors.rust,
     borderRadius: radius.md,
-    borderWidth: 1,
-    paddingHorizontal: spacing.md,
-    paddingVertical: spacing.sm,
+    borderWidth: 2,
+    gap: spacing.xs,
+    padding: spacing.md,
     position: 'absolute',
-    right: 0,
+    right: -100,
     top: 52,
-    width: 130,
+    width: 220,
+  },
+  messageTitle: {
+    color: colors.rustDark,
+    fontSize: 18,
+    fontWeight: '800',
+    textAlign: 'center',
   },
   messageText: {
-    color: colors.sand,
-    fontSize: 15,
-    fontWeight: '700',
+    color: colors.brown,
+    fontSize: 14,
+    lineHeight: 20,
     textAlign: 'center',
   },
 });

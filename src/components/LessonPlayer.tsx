@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { StyleSheet, Text } from 'react-native';
 
 import { Button } from '@/components/Button';
+import { Congrats } from '@/components/Congrats';
 import { ExerciseView } from '@/components/exercises/ExerciseView';
 import { FeedbackPanel } from '@/components/exercises/FeedbackPanel';
 import type { ExerciseResult } from '@/components/exercises/types';
@@ -27,12 +28,14 @@ export function LessonPlayer({
       pathname: '/level/[levelId]',
       params: { levelId },
     });
-  const { progress, current, recordLessonAnswer, finishLesson } = useProgress();
+  const { course, progress, current, recordLessonAnswer, finishLesson } =
+    useProgress();
   const [attempt, setAttempt] = useState(0);
   const [index, setIndex] = useState(0);
   const [correctCount, setCorrectCount] = useState(0);
   const [result, setResult] = useState<ExerciseResult | null>(null);
   const [bonusXp, setBonusXp] = useState(0);
+  const [clearedLevel, setClearedLevel] = useState<string | null>(null);
 
   const total = lesson.exercises.length;
 
@@ -41,7 +44,14 @@ export function LessonPlayer({
       <Screen decorated>
         <ProgressBar progress={1} />
         <StatsBar large />
-        <Text style={styles.title}>Lesson complete!</Text>
+        <Congrats
+          title={clearedLevel ? 'Level cleared!' : 'Lesson complete!'}
+          message={
+            clearedLevel
+              ? `You cleared ${clearedLevel}. Biso is so proud of you!`
+              : 'Nice work! Biso knew you could do it.'
+          }
+        />
         <Text style={styles.body}>
           You got {correctCount} of {total} right in {lesson.title} and earned{' '}
           {correctCount * XP_PER_CORRECT + bonusXp} XP.
@@ -56,6 +66,7 @@ export function LessonPlayer({
             setCorrectCount(0);
             setResult(null);
             setBonusXp(0);
+            setClearedLevel(null);
           }}
         />
       </Screen>
@@ -93,6 +104,13 @@ export function LessonPlayer({
     if (isLast) {
       if (!current.completedLessons.includes(lesson.id)) {
         setBonusXp(XP_FOR_FIRST_COMPLETION);
+        // Only the lesson that finishes a level gets the level celebration.
+        const unit = course?.units.find((item) => item.id === levelId);
+        const levelDone = unit?.lessons.every(
+          (item) =>
+            item.id === lesson.id || current.completedLessons.includes(item.id),
+        );
+        setClearedLevel(levelDone && unit ? unit.title : null);
       }
       finishLesson(lesson.id);
     }
@@ -131,5 +149,6 @@ const styles = StyleSheet.create({
     color: colors.brown,
     fontSize: 16,
     lineHeight: 24,
+    textAlign: 'center',
   },
 });

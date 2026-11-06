@@ -1,4 +1,5 @@
 import { buildUnits, type LanguageKey } from './buildCourse';
+import { GRAMMAR } from './grammar';
 import { LEVEL_PLAN } from './levels';
 import { PHRASEBOOK } from './phrasebook';
 import { spanishCourse } from './spanish';
@@ -11,19 +12,27 @@ function language(key: LanguageKey, title: string, greeting: string): Course {
     greeting,
     learningLanguage: key,
     fromLanguage: 'en',
-    units: buildUnits(LEVEL_PLAN, PHRASEBOOK, key, title),
+    units: buildUnits(LEVEL_PLAN, PHRASEBOOK, key, title, GRAMMAR[key]),
   };
 }
 
-// Spanish keeps its longer, hand-written first level, so saved progress still works.
+const spanishUnits = buildUnits(LEVEL_PLAN, PHRASEBOOK, 'es', 'Spanish', GRAMMAR.es);
+
+// Spanish keeps its longer, hand-written word lessons, so saved progress still
+// works, and gets the same grammar and writing lessons as every other language.
 const spanish: Course = {
   ...spanishCourse,
-  units: [
-    ...spanishCourse.units,
-    ...buildUnits(LEVEL_PLAN, PHRASEBOOK, 'es', 'Spanish').slice(
-      spanishCourse.units.length,
-    ),
-  ],
+  units: spanishUnits.map((unit) => {
+    const handWritten = spanishCourse.units.find((item) => item.id === unit.id);
+    if (!handWritten) return unit;
+    return {
+      ...handWritten,
+      lessons: [
+        ...handWritten.lessons,
+        ...unit.lessons.filter((lesson) => lesson.kind !== 'words'),
+      ],
+    };
+  }),
 };
 
 /** The ten languages Biso teaches. */

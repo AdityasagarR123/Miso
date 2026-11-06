@@ -4,6 +4,7 @@ import { MatchPairs } from './MatchPairs';
 import { MultipleChoice } from './MultipleChoice';
 import { Translate } from './Translate';
 import type { ExerciseProps } from './types';
+import { Write } from './Write';
 
 export function ExerciseView({
   exercise,
@@ -19,5 +20,7 @@ export function ExerciseView({
       return <MatchPairs exercise={exercise} locked={locked} onResult={onResult} />;
     case 'translate':
       return <Translate exercise={exercise} locked={locked} onResult={onResult} />;
+    case 'write':
+      return <Write exercise={exercise} locked={locked} onResult={onResult} />;
   }
 }

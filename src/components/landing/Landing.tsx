@@ -20,6 +20,7 @@ import {
 } from 'react-native';
 import Svg, { Path } from 'react-native-svg';
 
+import { useAuth } from '@/auth/AuthContext';
 import { GameCard, type CardPose } from './GameCard';
 import {
   HeartIcon,
@@ -226,6 +227,7 @@ function Section({
 export function Landing() {
   const router = useRouter();
   const { course, selectCourse } = useProgress();
+  const { user, loading, signOut } = useAuth();
   const { width, height } = useWindowDimensions();
   const scrollRef = useRef<ComponentRef<typeof ScrollView>>(null);
   const sectionY = useRef<Record<string, number>>({});
@@ -235,7 +237,9 @@ export function Landing() {
   const bob = useGentleMotion('bob');
 
   const isWide = width >= 800;
-  const showNavLinks = width >= 900;
+  const showNavLinks = width >= 980;
+  const showWordmark = width >= 430;
+  const shortInstall = width < 560;
   const headlineSize = isWide ? 68 : Math.max(38, width * 0.105);
   const headSize = headlineSize * 1.05;
   const headlineStyle = [
@@ -245,6 +249,8 @@ export function Landing() {
   const startLabel = course ? 'Continue learning' : 'Start learning for free';
   // Starting always offers the choice of language.
   const start = () => router.push('/languages');
+  const openAccount = (mode: 'sign-in' | 'sign-up') =>
+    router.push({ pathname: '/sign-in', params: { mode, next: '/languages' } });
   const goTo = (section: string) =>
     scrollRef.current?.scrollTo({
       y: Math.max(
@@ -400,13 +406,15 @@ export function Landing() {
             onPress={() => scrollRef.current?.scrollTo({ y: 0, animated: true })}
             style={styles.brand}
           >
-            <Image
-              accessibilityLabel="Biso logo"
-              source={LOGO_HEAD}
-              resizeMode="contain"
-              style={styles.brandLogo}
-            />
-            <Text style={styles.brandName}>Biso</Text>
+            <View style={styles.brandBadge}>
+              <Image
+                accessibilityLabel="Biso logo"
+                source={LOGO_HEAD}
+                resizeMode="contain"
+                style={styles.brandLogo}
+              />
+            </View>
+            {showWordmark ? <Text style={styles.brandName}>Biso</Text> : null}
           </Pressable>
 
           {showNavLinks ? (
@@ -433,10 +441,35 @@ export function Landing() {
           ) : null}
 
           <View style={styles.navActions}>
-            <InstallButton />
-            {showNavLinks ? (
-              <Pill label="Start" onPress={start} compact />
-            ) : null}
+            <InstallButton short={shortInstall} />
+            {loading ? null : (
+              <>
+                <Pressable
+                  accessibilityRole="button"
+                  onPress={() => (user ? signOut() : openAccount('sign-in'))}
+                  style={({ pressed }) => [
+                    styles.navOutline,
+                    pressed && styles.pressed,
+                  ]}
+                >
+                  <Text style={styles.navOutlineText}>
+                    {user ? 'Sign out' : 'Log in'}
+                  </Text>
+                </Pressable>
+                <Pressable
+                  accessibilityRole="button"
+                  onPress={() => (user ? start() : openAccount('sign-up'))}
+                  style={({ pressed }) => [
+                    styles.navPrimary,
+                    pressed && styles.pressed,
+                  ]}
+                >
+                  <Text style={styles.navPrimaryText}>
+                    {user ? 'Learn' : 'Sign up'}
+                  </Text>
+                </Pressable>
+              </>
+            )}
           </View>
         </View>
       </View>
@@ -481,7 +514,18 @@ const styles = StyleSheet.create({
   brand: {
     alignItems: 'center',
     flexDirection: 'row',
-    gap: spacing.sm,
+    flexGrow: 1,
+    flexBasis: 0,
+    gap: 10,
+  },
+  brandBadge: {
+    alignItems: 'center',
+    backgroundColor: colors.rust,
+    borderRadius: radius.pill,
+    height: 50,
+    justifyContent: 'center',
+    overflow: 'hidden',
+    width: 50,
   },
   brandLogo: {
     height: 42,
@@ -489,8 +533,9 @@ const styles = StyleSheet.create({
   },
   brandName: {
     color: colors.sand,
-    fontSize: 24,
-    fontWeight: '800',
+    fontSize: 28,
+    fontWeight: '900',
+    letterSpacing: -0.5,
   },
   navLinks: {
     flexDirection: 'row',
@@ -509,8 +554,38 @@ const styles = StyleSheet.create({
   },
   navActions: {
     alignItems: 'center',
+    flexBasis: 0,
     flexDirection: 'row',
-    gap: spacing.sm,
+    flexGrow: 1,
+    gap: 6,
+    justifyContent: 'flex-end',
+  },
+  navOutline: {
+    alignItems: 'center',
+    borderColor: colors.sandMuted,
+    borderRadius: radius.pill,
+    borderWidth: 1.5,
+    justifyContent: 'center',
+    minHeight: 44,
+    paddingHorizontal: 14,
+  },
+  navOutlineText: {
+    color: colors.sand,
+    fontSize: 15,
+    fontWeight: '800',
+  },
+  navPrimary: {
+    alignItems: 'center',
+    backgroundColor: colors.rust,
+    borderRadius: radius.pill,
+    justifyContent: 'center',
+    minHeight: 44,
+    paddingHorizontal: 14,
+  },
+  navPrimaryText: {
+    color: colors.white,
+    fontSize: 15,
+    fontWeight: '800',
   },
   scroll: {
     alignItems: 'center',
