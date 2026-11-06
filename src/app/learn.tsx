@@ -31,7 +31,7 @@ const STATUS_TEXT = {
 export default function LearnScreen() {
   const router = useRouter();
   const { course, lessons, current } = useProgress();
-  const { user, signOut } = useAuth();
+  const { user } = useAuth();
   const { width, height } = useWindowDimensions();
 
   if (!course) return <Redirect href="/languages" />;
@@ -101,11 +101,11 @@ export default function LearnScreen() {
             onPress={() => router.push('/languages')}
           />
           <Button
-            label={user ? 'Sign out' : 'Sign in'}
+            label={user ? 'Account' : 'Sign in'}
             variant="secondary"
             onPress={() =>
               user
-                ? signOut()
+                ? router.push('/account')
                 : router.push({ pathname: '/sign-in', params: { next: '/learn' } })
             }
           />

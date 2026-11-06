@@ -16,6 +16,8 @@ import { KeyedVideo } from '@/components/KeyedVideo';
 import { InstallButton } from '@/components/landing/InstallButton';
 import { themeForCourse } from '@/components/map/mapThemes';
 import { PageDoodles } from '@/components/map/PageDoodles';
+import { LanguageLinks, SiteFooterLinks, usePageMeta } from '@/components/site/SitePage';
+import { LANGUAGES_META } from '@/site/content';
 import { COURSES } from '@/course/courses';
 import { LEVEL_PLAN } from '@/course/levels';
 import type { Course } from '@/course/types';
@@ -127,6 +129,7 @@ function LanguageCard({
 }
 
 export default function LanguagesScreen() {
+  usePageMeta(LANGUAGES_META);
   const router = useRouter();
   const { course: chosen, progress, selectCourse } = useProgress();
   const { width } = useWindowDimensions();
@@ -190,12 +193,29 @@ export default function LanguagesScreen() {
             />
           ))}
         </View>
+
+        <View style={styles.moreAbout}>
+          <Text accessibilityRole="header" aria-level={2} style={styles.moreAboutTitle}>
+            Read about each course
+          </Text>
+          <LanguageLinks />
+          <SiteFooterLinks />
+        </View>
       </View>
     </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
+  moreAbout: {
+    gap: spacing.sm,
+    marginTop: spacing.lg,
+  },
+  moreAboutTitle: {
+    color: colors.brown,
+    fontSize: 22,
+    fontWeight: '800',
+  },
   page: {
     backgroundColor: colors.cream,
     flex: 1,

@@ -1,4 +1,4 @@
-import { Redirect, Stack, useLocalSearchParams, type Href } from 'expo-router';
+import { Link, Redirect, Stack, useLocalSearchParams, type Href } from 'expo-router';
 import { useState } from 'react';
 import {
   Image,
@@ -141,6 +141,14 @@ export default function SignInScreen() {
             onPress={submit}
           />
 
+          {creating ? (
+            <Text style={styles.consent}>
+              By creating an account, you agree to our{' '}
+              <Link href="/terms" style={styles.consentLink}>Terms of Service</Link> and{' '}
+              <Link href="/privacy" style={styles.consentLink}>Privacy Policy</Link>.
+            </Text>
+          ) : null}
+
           {creating ? null : (
             <Pressable
               accessibilityRole="button"
@@ -179,6 +187,17 @@ export default function SignInScreen() {
 }
 
 const styles = StyleSheet.create({
+  consent: {
+    color: colors.brown,
+    fontSize: 14,
+    lineHeight: 20,
+    textAlign: 'center',
+  },
+  consentLink: {
+    color: colors.tealDark,
+    fontWeight: '700',
+    textDecorationLine: 'underline',
+  },
   hero: {
     alignItems: 'center',
     gap: spacing.xs,

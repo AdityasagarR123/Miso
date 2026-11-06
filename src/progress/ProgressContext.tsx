@@ -39,6 +39,8 @@ type ProgressContextValue = {
   recordPracticeAnswer: (exerciseId: string, correct: boolean) => void;
   finishLesson: (lessonId: string) => void;
   finishPractice: () => void;
+  /** Erases all progress saved on this device. */
+  resetProgress: () => void;
 };
 
 const ProgressContext = createContext<ProgressContextValue | null>(null);
@@ -84,6 +86,7 @@ export function ProgressProvider({ children }: { children: ReactNode }) {
         ),
       finishPractice: () =>
         setProgress((prev) => completePractice(prev, dayKey(new Date()))),
+      resetProgress: () => setProgress(initialProgress),
     };
   }, [progress]);
 

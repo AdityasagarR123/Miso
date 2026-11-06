@@ -29,8 +29,10 @@ import {
   XpIcon,
 } from '@/components/GameIcons';
 import { useGentleMotion } from '@/components/gentleMotion';
+import { SiteFooterLinks, usePageMeta } from '@/components/site/SitePage';
 import { COURSES } from '@/course/courses';
 import { useProgress } from '@/progress/ProgressContext';
+import { HOME_META } from '@/site/content';
 import { colors, radius, spacing } from '@/theme';
 
 import { HeroArt } from './HeroArt';
@@ -209,7 +211,7 @@ function Section({
       onLayout={(event) => onLayoutY?.(event.nativeEvent.layout.y)}
       style={styles.section}
     >
-      <Text accessibilityRole="header" style={styles.sectionTitle}>
+      <Text accessibilityRole="header" aria-level={2} style={styles.sectionTitle}>
         {title}
       </Text>
       {subtitle ? <Text style={styles.sectionSubtitle}>{subtitle}</Text> : null}
@@ -219,6 +221,7 @@ function Section({
 }
 
 export function Landing() {
+  usePageMeta(HOME_META);
   const router = useRouter();
   const { course, selectCourse } = useProgress();
   const { user, loading, signOut } = useAuth();
@@ -276,10 +279,8 @@ export function Landing() {
           <HeroArt width={width} />
 
           <View style={styles.heroContent}>
-            <View style={styles.headline}>
-              <Text accessibilityRole="header" style={headlineStyle}>
-                Biso
-              </Text>
+            <View accessibilityRole="header" style={styles.headline}>
+              <Text style={headlineStyle}>Biso</Text>
               <View style={nod}>
                 <Image
                   accessibilityLabel="Biso the red panda, nodding along"
@@ -375,10 +376,11 @@ export function Landing() {
               style={styles.finalLogo}
             />
           </View>
-          <Text accessibilityRole="header" style={styles.finalTitle}>
+          <Text accessibilityRole="header" aria-level={2} style={styles.finalTitle}>
             Your first lesson is a few minutes away.
           </Text>
           <Pill label={startLabel} onPress={start} />
+          <SiteFooterLinks tone="dark" />
           <Text style={styles.footer}>Biso. Free language learning.</Text>
         </View>
       </ScrollView>

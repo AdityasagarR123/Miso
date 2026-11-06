@@ -22,6 +22,8 @@ const MESSAGES: Record<string, string> = {
   'auth/popup-blocked': 'Your browser blocked the Google window. Please allow pop-ups and try again.',
   'auth/unauthorized-domain': "Google sign-in isn't enabled for this website yet.",
   'auth/operation-not-allowed': "This way of signing in isn't turned on yet.",
+  'auth/requires-recent-login':
+    'For your safety, please sign out and sign in again, then delete your account.',
 };
 
 /** Firebase's error codes, in words a learner can act on. */

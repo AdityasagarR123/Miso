@@ -1,5 +1,6 @@
 import {
   createUserWithEmailAndPassword,
+  deleteUser,
   GoogleAuthProvider,
   onAuthStateChanged,
   sendPasswordResetEmail,
@@ -28,6 +29,8 @@ type AuthContextValue = {
   signInWithGoogle: () => Promise<void>;
   resetPassword: (email: string) => Promise<void>;
   signOut: () => Promise<void>;
+  /** Permanently deletes the signed-in account. */
+  deleteAccount: () => Promise<void>;
 };
 
 const AuthContext = createContext<AuthContextValue | null>(null);
@@ -67,6 +70,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       },
       signOut: async () => {
         await firebaseSignOut(requireAuth());
+      },
+      deleteAccount: async () => {
+        const current = requireAuth().currentUser;
+        if (current) await deleteUser(current);
       },
     }),
     [user, loading],

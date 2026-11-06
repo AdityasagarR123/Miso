@@ -52,6 +52,7 @@ export function TrailMap({ startLabel, onStart }: TrailMapProps) {
     >
       <Text
         accessibilityRole="header"
+        aria-level={2}
         style={[styles.title, !isWide && styles.titleSmall]}
       >
         Your <Text style={{ color: theme.accent }}>{theme.title}</Text> journey

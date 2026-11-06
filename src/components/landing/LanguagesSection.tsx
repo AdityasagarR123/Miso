@@ -112,6 +112,7 @@ export function LanguagesSection({
         <Text style={styles.kicker}>{LEVEL_PLAN.length} LEVELS IN EVERY LANGUAGE</Text>
         <Text
           accessibilityRole="header"
+          aria-level={2}
           style={[styles.title, !isWide && styles.titleSmall]}
         >
           Ten languages. One path.

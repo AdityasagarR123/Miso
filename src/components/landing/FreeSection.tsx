@@ -56,6 +56,7 @@ export function FreeSection() {
         <View style={[styles.copy, isWide && styles.copyWide]}>
           <Text
             accessibilityRole="header"
+            aria-level={2}
             style={[
               styles.title,
               { fontSize: titleSize, lineHeight: Math.round(titleSize * 1.05) },
