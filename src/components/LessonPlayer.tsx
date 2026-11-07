@@ -10,6 +10,7 @@ import type { ExerciseResult } from '@/components/exercises/types';
 import { ProgressBar } from '@/components/ProgressBar';
 import { Screen } from '@/components/Screen';
 import { StatsBar } from '@/components/StatsBar';
+import { TeachStep } from '@/components/TeachStep';
 import type { Lesson } from '@/course/types';
 import { XP_FOR_FIRST_COMPLETION, XP_PER_CORRECT } from '@/progress/progress';
 import { useProgress } from '@/progress/ProgressContext';
@@ -38,6 +39,7 @@ export function LessonPlayer({
   const [clearedLevel, setClearedLevel] = useState<string | null>(null);
 
   const total = lesson.exercises.length;
+  const questionCount = lesson.exercises.filter((item) => item.type !== 'teach').length;
 
   if (index >= total) {
     return (
@@ -53,7 +55,7 @@ export function LessonPlayer({
           }
         />
         <Text style={styles.body}>
-          You got {correctCount} of {total} right in {lesson.title} and earned{' '}
+          You got {correctCount} of {questionCount} right in {lesson.title} and earned{' '}
           {correctCount * XP_PER_CORRECT + bonusXp} XP.
         </Text>
         <Button label="Back to lessons" onPress={backToLevel} />
@@ -117,6 +119,22 @@ export function LessonPlayer({
     setResult(null);
     setIndex(index + 1);
   };
+
+  if (exercise.type === 'teach') {
+    return (
+      <Screen decorated>
+        <ProgressBar progress={index / total} />
+        <TeachStep
+          key={`${attempt}-${exercise.id}`}
+          exercise={exercise}
+          levelId={levelId}
+          languageTitle={course?.title ?? ''}
+          languageCode={course?.learningLanguage ?? ''}
+          onDone={goToNext}
+        />
+      </Screen>
+    );
+  }
 
   return (
     <Screen decorated>

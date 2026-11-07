@@ -251,6 +251,8 @@ export function buildPracticeSet(
         isLessonUnlocked(lessons, current.completedLessons, lesson.id),
     )
     .flatMap((lesson) => lesson.exercises);
+  // Teaching steps are not questions, so they never appear in practice.
+  const isQuestion = (exercise: Exercise) => exercise.type !== 'teach';
   const isMistake = (exercise: Exercise) =>
     current.mistakes.includes(exercise.id);
 
@@ -259,7 +261,9 @@ export function buildPracticeSet(
     .filter(isMistake);
   const others = available.filter((exercise) => !isMistake(exercise));
 
-  return withoutRepeats([...order(everyMistake), ...order(others)]).slice(0, limit);
+  return withoutRepeats(
+    [...order(everyMistake), ...order(others)].filter(isQuestion),
+  ).slice(0, limit);
 }
 
 function parseIds(value: unknown): string[] {

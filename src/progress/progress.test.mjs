@@ -164,6 +164,14 @@ test('practice can focus on one kind of lesson, without repeats', () => {
   assert.deepEqual(ids('grammar', { completedLessons: [], mistakes: ['m'] }), ['g1-1']);
 });
 
+test('teaching steps never appear in practice', () => {
+  const lessons = [
+    { id: 'a', exercises: [{ id: 't', type: 'teach', prompt: 'p', items: [] }, { id: 'q', prompt: 'q' }] },
+  ];
+  const ids = buildPracticeSet(lessons, { completedLessons: [], mistakes: [] }, 5).map((e) => e.id);
+  assert.deepEqual(ids, ['q']);
+});
+
 test('lessons unlock one at a time', () => {
   assert.equal(isLessonUnlocked(lessons, [], 'a'), true);
   assert.equal(isLessonUnlocked(lessons, [], 'b'), false);

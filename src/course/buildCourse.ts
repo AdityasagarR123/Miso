@@ -1,7 +1,7 @@
 import type { GrammarQuestion } from './grammar';
 import type { Level } from './levels';
 import type { Phrase, Scripted } from './phrasebook';
-import type { Exercise, Lesson, Unit } from './types';
+import type { Exercise, Lesson, TeachExercise, Unit } from './types';
 
 export type LanguageKey = Exclude<keyof Phrase, 'en'>;
 
@@ -85,6 +85,25 @@ function buildExercises(
       wordBank: [...answerWords, ...new Set(spareWords.slice(0, 2))],
     },
   ];
+}
+
+/** Shows the lesson's words, with how to say them, before asking anything. */
+function buildTeachStep(
+  lessonId: string,
+  phrases: readonly Phrase[],
+  language: LanguageKey,
+): TeachExercise {
+  return {
+    id: `${lessonId}-teach`,
+    type: 'teach',
+    prompt: 'Learn these words',
+    items: phrases.map((phrase) => {
+      const value = phrase[language];
+      return typeof value === 'string'
+        ? { english: phrase.en, target: value }
+        : { english: phrase.en, target: (value as Scripted)[0], say: (value as Scripted)[1] };
+    }),
+  };
 }
 
 /** This level's questions come first, then a review of the ones just before. */
@@ -179,7 +198,14 @@ export function buildUnits(
         id,
         title: `Words ${part + 1}`,
         kind: 'words',
-        exercises: buildExercises(id, languageTitle, lessonItems, items),
+        exercises: [
+          buildTeachStep(
+            id,
+            levelPhrases.slice(part * PHRASES_PER_LESSON, (part + 1) * PHRASES_PER_LESSON),
+            language,
+          ),
+          ...buildExercises(id, languageTitle, lessonItems, items),
+        ],
       };
     });
 

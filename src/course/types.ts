@@ -33,7 +33,16 @@ export type WriteExercise = {
   hint?: string;
 };
 
+/** A character teaches new words before any questions. It is never graded. */
+export type TeachExercise = {
+  id: string;
+  type: 'teach';
+  prompt: string;
+  items: { english: string; target: string; say?: string }[];
+};
+
 export type Exercise =
+  | TeachExercise
   | MultipleChoiceExercise
   | MatchPairsExercise
   | TranslateExercise

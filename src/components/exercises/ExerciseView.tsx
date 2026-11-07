@@ -22,5 +22,8 @@ export function ExerciseView({
       return <Translate exercise={exercise} locked={locked} onResult={onResult} />;
     case 'write':
       return <Write exercise={exercise} locked={locked} onResult={onResult} />;
+    case 'teach':
+      // Lessons show teaching steps themselves, because they aren't questions.
+      return null;
   }
 }

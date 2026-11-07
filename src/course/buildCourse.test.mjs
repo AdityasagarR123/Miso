@@ -71,6 +71,26 @@ for (const [language, title] of Object.entries(LANGUAGES)) {
     });
   });
 
+  test(`${title}: every word lesson teaches its words before asking`, () => {
+    for (const unit of units) {
+      for (const lesson of unit.lessons.slice(0, 2)) {
+        const [teach] = lesson.exercises;
+        assert.equal(teach.type, 'teach', lesson.id);
+        assert.equal(teach.items.length, 4, lesson.id);
+        const pairs = lesson.exercises.find((e) => e.type === 'match_pairs');
+        assert.deepEqual(
+          teach.items.map((item) => item.english),
+          pairs.pairs.map((pair) => pair.right),
+          `${lesson.id}: teaches different words than it asks`,
+        );
+        for (const item of teach.items) assert.ok(item.target.trim(), lesson.id);
+      }
+      for (const lesson of unit.lessons.slice(2)) {
+        assert.ok(lesson.exercises.every((e) => e.type !== 'teach'), lesson.id);
+      }
+    }
+  });
+
   test(`${title}: every writing exercise can be answered as shown`, () => {
     for (const unit of units) {
       const writing = unit.lessons[3].exercises;
@@ -123,7 +143,7 @@ test('scripts a beginner cannot read yet show how to say them', () => {
     ['ar', 'Arabic'],
   ]) {
     const [first] = buildUnits(LEVEL_PLAN, PHRASEBOOK, language, title, GRAMMAR[language]);
-    const pair = first.lessons[0].exercises[2].pairs[0];
+    const pair = first.lessons[0].exercises.find((e) => e.type === 'match_pairs').pairs[0];
     assert.match(pair.left, /\(.+\)$/, `${title} has no pronunciation guide`);
   }
 });

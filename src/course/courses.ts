@@ -3,7 +3,25 @@ import { GRAMMAR } from './grammar';
 import { LEVEL_PLAN } from './levels';
 import { PHRASEBOOK } from './phrasebook';
 import { spanishCourse } from './spanish';
-import type { Course } from './types';
+import type { Course, Lesson } from './types';
+
+/** Adds a teaching step to a hand-written lesson, using its matching pairs. */
+function withTeachStep(lesson: Lesson): Lesson {
+  const pairs = lesson.exercises.find((exercise) => exercise.type === 'match_pairs');
+  if (!pairs || pairs.type !== 'match_pairs') return lesson;
+  return {
+    ...lesson,
+    exercises: [
+      {
+        id: `${lesson.id}-teach`,
+        type: 'teach',
+        prompt: 'Learn these words',
+        items: pairs.pairs.map((pair) => ({ english: pair.right, target: pair.left })),
+      },
+      ...lesson.exercises,
+    ],
+  };
+}
 
 function language(key: LanguageKey, title: string, greeting: string): Course {
   return {
@@ -28,7 +46,7 @@ const spanish: Course = {
     return {
       ...handWritten,
       lessons: [
-        ...handWritten.lessons,
+        ...handWritten.lessons.map(withTeachStep),
         ...unit.lessons.filter((lesson) => lesson.kind !== 'words'),
       ],
     };
